@@ -1,0 +1,700 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>app-clinica documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">app-clinica documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search">
+    <button type="button"
+        class="search-input-clear"
+        aria-label="Clear search"
+        data-search-input-clear>&times;</button>
+</div>
+            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">Components</li>
+  <li class="breadcrumb-item"
+  >
+  InstitucionalComponent</li>
+</ol>
+
+<div class="io-file io-file-path" data-compodoc="entity-file-path">
+    <span class="icon ion-ios-document" aria-hidden="true"></span>
+    <code>src/app/pages/institucional/institucional.ts</code>
+</div>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a href="#info" class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li class="nav-item">
+            <a href="#source" class="nav-link"
+                role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li class="nav-item">
+            <a href="#templateData" class="nav-link"
+                role="tab" id="templateData-tab" data-bs-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li class="nav-item">
+            <a href="#styleData" class="nav-link"
+                role="tab" id="styleData-tab" data-bs-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li class="nav-item">
+            <a href="#tree" class="nav-link"
+                role="tab" id="tree-tab" data-bs-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="info">
+
+
+
+
+<section data-compodoc="block-metadata">
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover metadata">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-institucional</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">standalone</td>
+                <td class="col-md-9"><code>true</code></td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./institucional.css</code></td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./institucional.html</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">styleUrl</td>
+                <td class="col-md-9"><code>./institucional.css</code></td>
+            </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
+
+
+
+    <div class="tab-pane fade  tab-source-code" id="source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &quot;@angular/core&quot;;
+
+
+@Component({
+  selector: &#x27;app-institucional&#x27;,
+  templateUrl: &#x27;./institucional.html&#x27;,
+  styleUrl: &#x27;./institucional.css&#x27;,
+  imports: []
+})
+export class InstitucionalComponent {
+
+}
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;main class&#x3D;&quot;container &quot;&gt;
+  &lt;div class&#x3D;&quot;row justify-content-center&quot; style&#x3D;&quot;
+    margin-top: 20%;&quot;&gt;
+    &lt;!--Seccion Institucional--&gt;
+    &lt;section&gt;
+      &lt;h2&gt;¿Quiénes somos?&lt;/h2&gt;
+      &lt;p&gt;
+        En Vital Consultorios creemos que el bienestar integral comienza con una atención
+        personalizada, ética y comprometida. Somos un espacio pensado para acompañar a cada persona
+        en su proceso de salud, brindando contención profesional y soluciones adaptadas a sus
+        necesidades.
+      &lt;/p&gt;
+      &lt;h2&gt;Nuestra mision&lt;/h2&gt;
+      &lt;p&gt;
+        Ofrecer servicios de calidad, con calidez humana, promoviendo el cuidado físico, emocional y
+        mental de nuestros pacientes. Trabajamos con responsabilidad, respeto y vocación, buscando
+        generar un impacto positivo en cada consulta.
+      &lt;/p&gt;
+      &lt;h2&gt;Nuestra vision&lt;/h2&gt;
+      &lt;p&gt;
+        Ser un referente en atención integral en la región, consolidando un equipo
+        interdisciplinario que combine innovación, formación continua y empatía. Queremos que cada
+        persona que ingrese a Vital Consultorios se sienta escuchada, cuidada y acompañada.
+      &lt;/p&gt;
+      &lt;!-- Titulo seccion Autoridades--&gt;
+    &lt;/section&gt;
+    &lt;section class&#x3D;&quot;titulo-intermedio&quot;&gt;
+      &lt;h2&gt;Autoridades&lt;/h2&gt;
+    &lt;/section&gt;
+    &lt;!--card 1--&gt;
+    &lt;div class&#x3D;&quot;col-md-4 mb-4&quot;&gt;
+      &lt;div class&#x3D;&quot;card h-100 text-center shadow&quot;&gt;
+        &lt;img
+          src&#x3D;&quot;imagenes/Dr. Lorena Gonzalez.jpg&quot;
+          class&#x3D;&quot;card-img-top&quot;
+          alt&#x3D;&quot;Dra. Lorena Gonzalez&quot;
+        /&gt;
+        &lt;div class&#x3D;&quot;card-body&quot;&gt;
+          &lt;h5 class&#x3D;&quot;card-title&quot;&gt;Directora general&lt;/h5&gt;
+          &lt;p class&#x3D;&quot;card-text&quot;&gt;Dra. Lorena Gonzalez&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!--card 2--&gt;
+    &lt;div class&#x3D;&quot;col-md-4 mb-4&quot;&gt;
+      &lt;div class&#x3D;&quot;card h-100 text-center shadow&quot;&gt;
+        &lt;img
+          src&#x3D;&quot;imagenes/Contador Jorge Lopez.jpg&quot;
+          class&#x3D;&quot;card-img-top img-fluid&quot;
+          alt&#x3D;&quot;Contador Jorge Lopez&quot;
+        /&gt;
+        &lt;div class&#x3D;&quot;card-body&quot;&gt;
+          &lt;h5 class&#x3D;&quot;card-title&quot;&gt;Director Financiero&lt;/h5&gt;
+          &lt;p class&#x3D;&quot;card-text&quot;&gt;Contador Jorge Lopez&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!--card 3--&gt;
+    &lt;div class&#x3D;&quot;col-md-4 mb-4&quot;&gt;
+      &lt;div class&#x3D;&quot;card h-100 text-center shadow&quot;&gt;
+        &lt;img
+          src&#x3D;&quot;imagenes/Dr. Lorenzo David.jpg&quot;
+          class&#x3D;&quot;card-img-top img-fluid&quot;
+          alt&#x3D;&quot;Dr. Lorenzo David&quot;
+        /&gt;
+        &lt;div class&#x3D;&quot;card-body&quot;&gt;
+          &lt;h5 class&#x3D;&quot;card-title&quot;&gt;Director Medico&lt;/h5&gt;
+          &lt;p class&#x3D;&quot;card-text&quot;&gt;Dr. Lorenzo David&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="styleData">
+                <p class="comment">
+                    <code>./institucional.css</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">/* &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; establece estilos al body &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #c0b6b69f;
+  color: #080303;
+  line-height: 1.6;
+  font-family: &quot;Open Sans&quot;, sans-serif;
+ 
+  
+  
+}
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; establece estilos al header &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+.navbar-principal {
+  background-color: #31a387;
+  color: #ffffff;
+}
+/* Estilo de los enlaces dentro del navbar */
+
+.navbar-nav .nav-link {
+  /* color: #eff2f5; */ /* blanco institucional */
+  color: #f5f3f3;
+  transition: color 0.3s ease;
+  font-weight: 600;
+  font-family: &quot;Open Sans&quot;, sans-serif;
+}
+/* Efecto hover sobre los enlaces del navbar */
+
+.navbar-nav .nav-link:hover {
+  color: #080303; /* color al pasar el mouse */
+  font-size: larger;
+}
+/* Tamaño del logo dentro del navbar */
+div a img{
+  width: 80px;
+}
+/* Estilo del título institucional dentro del navbar */
+.titulo-navbar {
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  margin-left: 15px;
+  display: center;
+  align-items: center;
+}
+/* Contenedor del encabezado fijo */
+
+.encabezado {
+  margin: 0;
+  background: #31a387;
+  color: rgb(253, 251, 251);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 3px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  line-height: 1;
+}
+/* Contenedor del título principal institucional */
+.titulo_principal {
+  font-family: &quot;Roboto&quot;, sans-serif;
+  text-align: center;
+  color: white;
+  align-items: center;
+  flex: 1;
+}
+/* Título principal (h1) dentro del encabezado */
+.titulo_principal h1 {
+  font-size: 40px;
+  font-weight: 700;
+}
+/* Subtítulo institucional (h2) */
+.titulo_principal h2 {
+  font-size: 30px;
+  font-weight: 550;
+  color: white;
+}
+/* Menú principal horizontal */
+
+.menu_principal ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+}
+/* Estilo de los enlaces del menú */
+
+.menu_principal a {
+  font-family: sans-serif;
+  color: #eceef5;
+  padding: 8px 12px;
+  white-space: nowrap;
+  text-decoration: none;
+  font-weight: 600;
+}
+/* Estilo general para títulos h1 */
+
+h1 {
+  font-size: 50px;     
+  font-weight: bold;   
+  margin: 0;           
+}
+li {
+  display: inline;
+  margin-right: 20px;
+}
+/* Efecto hover sobre enlaces de lista */
+/* Subraya al pasar el mouse */
+li a:hover {
+  /* color: #141414; */
+  text-decoration: underline;
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; establece estilos al main &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+
+main {
+  position: relative;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* Título intermedio para secciones como &quot;Autoridades&quot; */
+
+.titulo-intermedio {
+  text-align: center;
+  margin: 40px 0 40px 0;
+}
+
+.titulo-intermedio h2 {
+  font-size: 35px;
+  font-weight: 20;
+  color: #050b11; 
+  font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, &quot;Helvetica Neue&quot;, Arial, sans-serif;
+}
+/* Imagen destacada en tarjetas o secciones */
+
+.card-img-top {
+  object-fit: cover;
+  height: 600px; 
+  width: 100%;
+}
+/* Estilos generales para secciones */
+
+section {
+  padding-bottom: 1px;
+}
+/* Párrafos dentro de secciones */
+
+section p {
+  font-family: &quot;Segoe UI&quot;, Arial, sans-serif;
+  font-size: 20px;
+  border: 1px solid #a2e6d5;
+  border-radius: 2px;
+  box-shadow: 5px 6px 23px #b7e9dc;
+}
+/* Último párrafo de la sección con margen inferior adicional */
+
+section p:last-child {
+  margin-bottom: 50px;
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; establece estilos al footer &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+
+.pie_de_portada {
+  background: #31a387;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-family: &quot;Open Sans&quot;, sans-serif;
+  line-height: 1.5;
+}
+
+.pie_de_portada a {
+  color: white; /* blanco institucional */
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.pie_de_portada a:hover {
+  text-decoration: underline;
+  color: #080303; /* color al pasar el mouse */
+  
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; MODO OSCURO: ESTILOS GENERALES &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] body {
+  background-color: #121212; /* Fondo principal oscuro */
+  color: #e0e0e0; /* Texto claro para buena legibilidad */
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; NAVBAR &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] .navbar-principal {
+  background-color: #1f1f1f; /* Fondo oscuro institucional */
+  color: #f8f9fa; /* Texto claro en el navbar */
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; TARJETAS &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] .card {
+  background-color: #2c2c2c; /* Fondo oscuro para tarjetas */
+  color: #f0f0f0; /* Texto claro dentro de tarjetas */
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; TÍTULO DEL NAVBAR &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] .titulo-navbar {
+  color: #ffffff; /* Blanco puro para destacar el título */
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; FOOTER &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] .pie_de_portada {
+  background-color: #1a1a1a; /* Fondo oscuro institucional */
+  color: #f0f0f0; /* Texto claro en el pie de página */
+}
+
+[data-bs-theme&#x3D;&quot;dark&quot;] .pie_de_portada a {
+  color: #9ecfff; /* Enlaces en azul claro institucional */
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; CONTENIDO PRINCIPAL &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] main {
+  background-color: #1e1e1e; /* Fondo oscuro para el contenido */
+  color: #e0e0e0; /* Texto claro para mantener contraste */
+}
+
+[data-bs-theme&#x3D;&quot;dark&quot;] section p {
+  background-color: #2a2a2a; /* Fondo oscuro para párrafos */
+  border-color: #444; /* Borde más tenue en modo oscuro */
+  box-shadow: 5px 6px 23px #000000; /* Sombra más profunda */
+}
+
+/*&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D; TÍTULO DE SECCIÓN INTERMEDIA &#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;*/
+[data-bs-theme&#x3D;&quot;dark&quot;] .titulo-intermedio h2 {
+  color: #e0e0e0; /* Texto claro para títulos como &quot;Autoridades&quot; */
+
+
+
+}
+
+
+
+
+
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis-network.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><main class="container ">  <div class="row justify-content-center" style="    margin-top: 20%;">    <!--Seccion Institucional-->    <section>      <h2>¿Quiénes somos?</h2>      <p>        En Vital Consultorios creemos que el bienestar integral comienza con una atención        personalizada, ética y comprometida. Somos un espacio pensado para acompañar a cada persona        en su proceso de salud, brindando contención profesional y soluciones adaptadas a sus        necesidades.      </p>      <h2>Nuestra mision</h2>      <p>        Ofrecer servicios de calidad, con calidez humana, promoviendo el cuidado físico, emocional y        mental de nuestros pacientes. Trabajamos con responsabilidad, respeto y vocación, buscando        generar un impacto positivo en cada consulta.      </p>      <h2>Nuestra vision</h2>      <p>        Ser un referente en atención integral en la región, consolidando un equipo        interdisciplinario que combine innovación, formación continua y empatía. Queremos que cada        persona que ingrese a Vital Consultorios se sienta escuchada, cuidada y acompañada.      </p>      <!-- Titulo seccion Autoridades-->    </section>    <section class="titulo-intermedio">      <h2>Autoridades</h2>    </section>    <!--card 1-->    <div class="col-md-4 mb-4">      <div class="card h-100 text-center shadow">        <img          src="imagenes/Dr. Lorena Gonzalez.jpg"          class="card-img-top"          alt="Dra. Lorena Gonzalez"        />        <div class="card-body">          <h5 class="card-title">Directora general</h5>          <p class="card-text">Dra. Lorena Gonzalez</p>        </div>      </div>    </div>    <!--card 2-->    <div class="col-md-4 mb-4">      <div class="card h-100 text-center shadow">        <img          src="imagenes/Contador Jorge Lopez.jpg"          class="card-img-top img-fluid"          alt="Contador Jorge Lopez"        />        <div class="card-body">          <h5 class="card-title">Director Financiero</h5>          <p class="card-text">Contador Jorge Lopez</p>        </div>      </div>    </div>    <!--card 3-->    <div class="col-md-4 mb-4">      <div class="card h-100 text-center shadow">        <img          src="imagenes/Dr. Lorenzo David.jpg"          class="card-img-top img-fluid"          alt="Dr. Lorenzo David"        />        <div class="card-body">          <h5 class="card-title">Director Medico</h5>          <p class="card-text">Dr. Lorenzo David</p>        </div>      </div>    </div>  </div></main></div>'
+    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AuthLayoutComponent', 'selector': 'app-authLayout'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InstitucionalComponent', 'selector': 'app-institucional'},{'name': 'MainLayoutComponent', 'selector': 'app-mainLayout'},{'name': 'TurnosComponent', 'selector': 'app-turnos'}];
+    var DIRECTIVES = [];
+    var ACTUAL_COMPONENT = {'name': 'InstitucionalComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'InstitucionalComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var updateDarkModeSwitchOffset = function () {
+                    var content = document.querySelector('.content');
+                    var scrollbarWidth = 0;
+
+                    if (content) {
+                         scrollbarWidth = Math.max(0, content.offsetWidth - content.clientWidth);
+                    }
+
+                    document.documentElement.style.setProperty(
+                         '--content-scrollbar-width',
+                         scrollbarWidth + 'px'
+                    );
+               };
+
+               updateDarkModeSwitchOffset();
+               requestAnimationFrame(updateDarkModeSwitchOffset);
+               window.addEventListener('resize', updateDarkModeSwitchOffset);
+
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

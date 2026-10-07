@@ -1,0 +1,69 @@
+<section class="portada d-flex flex-column align-items-center justify-content-center text-center">
+  <h3 class="fs-4 fs-sm-3 fs-md-2 fs-lg-1">Reservá tu turno médico</h3>
+  <p class="p-2 p-md-3 p-lg-4">
+    En <strong>Vital Consultorios</strong> podés agendar tu consulta con nuestros profesionales de
+    forma rápida y segura.
+  </p>
+</section>
+
+<!-- <h1>{{medicos}}</h1> -->
+listado de medicos (total: {{ medicos().length }})
+<p>fechaMin: {{fechaMin}} fechaMax: {{fechaMax}}</p>
+@for (medico of medicos(); track medico.id) {
+  <p>ID: {{ medico.idMedico }}</p>
+  <p>usuartio ID:{{ medico.usuario }}</p>
+  <p>Nombres: {{ medico.nombre }}, Apellido: {{ medico.apellido }}</p>
+
+  <p>Matrícula: {{ medico.matricula }}</p>
+} @empty {
+  <p>No hay médicos disponibles en este momento.</p>
+}
+
+<!-- FORMULARIO -->
+<main class="container my-5">
+  <h2 class="text-center text-primary mb-4 fw-bold">Formulario de Reserva</h2>
+
+  <form [formGroup]="form"
+    id="formReserva"
+    class="card row g-3 p-4 shadow"
+    style="background-color: #e8fdf7; border: 2px solid #31a387"
+  >
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Nombre y Apellido:</label>
+      <input type="text" id="nombrePaciente" class="form-control" required />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Documento:</label>
+      <input type="text" id="documentoPaciente" class="form-control" required />
+    </div>
+    <!-- <div class="col-md-6">
+        <label class="form-label fw-semibold">Especialidad:</label>
+        <select id="especialidadSelect" class="form-select" required></select>
+      </div> -->
+    <div class="col-md-6">
+      <label class="form-label fw-semibold">Médico:</label>
+      <select id="medicoSelect" class="form-select" formControlName="medicoId" required>
+        @for (medico of medicos(); track medico.id) {
+          <option [ngValue]="medico.idMedico">
+            Dr. {{ medico.nombre }} {{ medico.apellido }}
+          </option>
+        }
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold" for="fechaTurno">feha:</label>
+      <input style="display:block" type="date" min="{{fechaMin}}" max="{{fechaMax}}" name="fechaTurno" id="fechaTurno" required />
+      <!-- <select id="fechaTurno" class="form-select" required></select> -->
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold" for="horaTurno">Turno disponible:</label>
+      <select id="horaTurno"  class="form-select"  required></select>
+    </div>
+    <div class="col-12 mt-3 text-center">
+      <button type="submit" class="btn btn-success me-2">Confirmar Reserva</button>
+      <button type="button" class="btn btn-danger" id="cancelarReservaBtn">Cancelar Reserva</button>
+    </div>
+  </form>
+
+  <div id="resumenReserva" class="mt-5"></div>
+</main>

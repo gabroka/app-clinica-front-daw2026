@@ -1,0 +1,6 @@
+export enum EstadoEnum {
+  ACTIVO = "ACTIVO",
+  ATENDIDO = "ATENDIDO",
+  AUSENTE = "AUSENTE",
+  CANCELADO = "CANCELADO"
+}

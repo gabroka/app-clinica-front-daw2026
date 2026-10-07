@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "compodoc":"npx compodoc -p tsconfig.app.json -d documentation -s -w",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -17,6 +18,9 @@
     "@angular/forms": "^21.2.0",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
+    "@ng-select/ng-select": "^21.8.2",
+    "@primeuix/themes": "^2.0.3",
+    "primeng": "^21.1.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
