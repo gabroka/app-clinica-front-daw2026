@@ -10,10 +10,8 @@ import { InputText } from "primeng/inputtext";
 
 @Component({
     selector: "app-login",
-    //templateUrl: "./login.html",
-    templateUrl: "./home.html",
-    //styleUrl: "./login.css",
-    styleUrl: "./home.css",
+    templateUrl: "./login.html",
+    styleUrl: "./login.css",
     imports: [ReactiveFormsModule, InputText, Password, Button]
 })
 export class Login {
