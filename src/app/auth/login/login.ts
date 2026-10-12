@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { MessageService } from "primeng/api";
 import { LoginApiClient } from "./login-api-client";
 import { AuthStore } from "../auth-store";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { Button } from "primeng/button";
 import { Password } from "primeng/password";
 import { InputText } from "primeng/inputtext";
@@ -12,9 +12,10 @@ import { InputText } from "primeng/inputtext";
     selector: "app-login",
     templateUrl: "./login.html",
     styleUrl: "./login.css",
-    imports: [ReactiveFormsModule, InputText, Password, Button]
+    imports: [RouterLink, ReactiveFormsModule, InputText, Password, Button],
+  
 })
-export class Login {
+export class LoginComponent {
 
     private readonly messageService: MessageService = inject(MessageService)
 
