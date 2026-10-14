@@ -3,17 +3,19 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura'
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+//import { authInterceptor } from './auth/interceptors/auth.interceptor'; // Ajusta la ruta real
+import { authInterceptor } from './auth/auth-interceptor';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    providePrimeNG({//configuracion basica de primwng, aura es el tema por defecto
-      theme:{
+    providePrimeNG({
+      theme: {
         preset: Aura
       }
     }),
-    
-    provideHttpClient()
+    provideHttpClient(withInterceptors([authInterceptor]))
   ]
 };

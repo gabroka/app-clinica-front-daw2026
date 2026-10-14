@@ -1,14 +1,23 @@
-import { Component } from "@angular/core";
+import { Component, inject,  OnInit, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
-
+import { Logout } from "../../auth/logout";
 
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.html',
   styleUrl: './header.css',
-  imports: [ RouterLink]
+  imports: [RouterLink]
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  protected isAutenticated = signal(false);
+private logout = inject(Logout)
+  ngOnInit(): void {
+    this.isAutenticated.set(sessionStorage.getItem('accessToken') !== null);
+    
+  }
 
+  cerrarSesion(){
+    this.logout.logout()
+  }
 }
