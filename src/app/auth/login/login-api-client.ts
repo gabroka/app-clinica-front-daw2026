@@ -11,7 +11,7 @@ export class LoginApiClient{
 
     iniciarSesion(email: string, clave: string): Observable<{accessToken: string}>{
 
-        return this.httpClient.post<{accessToken:string}>("/auth/login", {email, clave});
+        return this.httpClient.post<{accessToken:string}>("/api/auth/login", {email, clave});
 
     }
 
