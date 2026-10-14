@@ -12,7 +12,7 @@ import { InputText } from "primeng/inputtext";
     selector: "app-login",
     templateUrl: "./login.html",
     styleUrl: "./login.css",
-    imports: [RouterLink, ReactiveFormsModule, InputText, Password, Button],
+    imports: [ReactiveFormsModule, InputText, Password, Button],
   
 })
 export class LoginComponent {
