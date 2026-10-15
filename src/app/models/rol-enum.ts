@@ -1,0 +1,6 @@
+export enum RolEnum {
+  ADMINISTRADOR = "ADMINISTRADOR",
+  MEDICO = "MEDICO",
+  PACIENTE = "PACIENTE"
+  
+}
