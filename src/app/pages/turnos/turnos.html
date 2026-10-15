@@ -6,35 +6,25 @@
   </p>
 </section>
 
-<!-- <h1>{{medicos}}</h1> -->
-listado de medicos (total: {{ medicos().length }})
-<p>fechaMin: {{fechaMin}} fechaMax: {{fechaMax}}</p>
-@for (medico of medicos(); track medico.id) {
-  <p>ID: {{ medico.idMedico }}</p>
-  <p>usuartio ID:{{ medico.usuario }}</p>
-  <p>Nombres: {{ medico.nombre }}, Apellido: {{ medico.apellido }}</p>
 
-  <p>Matrícula: {{ medico.matricula }}</p>
-} @empty {
-  <p>No hay médicos disponibles en este momento.</p>
-}
 
 <!-- FORMULARIO -->
 <main class="container my-5">
   <h2 class="text-center text-primary mb-4 fw-bold">Formulario de Reserva</h2>
 
-  <form [formGroup]="form"
+  <form
+    [formGroup]="form"
     id="formReserva"
     class="card row g-3 p-4 shadow"
     style="background-color: #e8fdf7; border: 2px solid #31a387"
   >
     <div class="col-md-6">
       <label class="form-label fw-semibold">Nombre y Apellido:</label>
-      <input type="text" id="nombrePaciente" class="form-control" required />
+      <input type="text" id="nombrePaciente" formControlName="nombre" class="form-control" required />
     </div>
     <div class="col-md-6">
       <label class="form-label fw-semibold">Documento:</label>
-      <input type="text" id="documentoPaciente" class="form-control" required />
+      <input type="text" id="documentoPaciente" formControlName="documento" class="form-control" required />
     </div>
     <!-- <div class="col-md-6">
         <label class="form-label fw-semibold">Especialidad:</label>
@@ -43,24 +33,37 @@ listado de medicos (total: {{ medicos().length }})
     <div class="col-md-6">
       <label class="form-label fw-semibold">Médico:</label>
       <select id="medicoSelect" class="form-select" formControlName="medicoId" required>
-        @for (medico of medicos(); track medico.id) {
-          <option [ngValue]="medico.idMedico">
-            Dr. {{ medico.nombre }} {{ medico.apellido }}
-          </option>
+        @for (medico of medicos(); track medico.idMedico) {
+          <option [ngValue]="medico.idMedico">Dr. {{ medico.nombre }} {{ medico.apellido }}</option>
         }
       </select>
     </div>
     <div class="col-md-6">
-      <label class="form-label fw-semibold" for="fechaTurno">feha:</label>
-      <input style="display:block" type="date" min="{{fechaMin}}" max="{{fechaMax}}" name="fechaTurno" id="fechaTurno" required />
+      <label class="form-label fw-semibold">Valor de la consulta</label>
+      <input
+        type="text"
+        id="valorConsulta"
+        formControlName="precioConsulta"
+        class="form-control"
+        
+      />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label fw-semibold" for="fechaTurno">fecha:</label>
+         <input style="display:block" type="date" [min]="fechaMin" [max]="fechaMax" name="fechaTurno" id="fechaTurno" formControlName='fecha' required />
+      
       <!-- <select id="fechaTurno" class="form-select" required></select> -->
     </div>
     <div class="col-md-6">
       <label class="form-label fw-semibold" for="horaTurno">Turno disponible:</label>
-      <select id="horaTurno"  class="form-select"  required></select>
+      <select id="horaTurno" class="form-select" formControlName='hora' required>
+        @for(h of horariosDisponibles();track h){
+        <option [ngValue]="h">{{h}}</option>
+      }
+      </select>
     </div>
     <div class="col-12 mt-3 text-center">
-      <button type="submit" class="btn btn-success me-2">Confirmar Reserva</button>
+      <button type="submit" class="btn btn-success me-2" (click)="confirmarReserva()">Confirmar Reserva</button>
       <button type="button" class="btn btn-danger" id="cancelarReservaBtn">Cancelar Reserva</button>
     </div>
   </form>
