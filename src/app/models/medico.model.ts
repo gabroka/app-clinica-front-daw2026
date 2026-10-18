@@ -1,10 +1,9 @@
-
-
-export interface Medico {
-  apellido: string
+/* lo que me devuelve la ruta /api/medicos */
+export interface MedicoModel {
   idMedico: Number
   idUsuario: number
-  mp: number
   nombre: string
+  apellido: string
+  mp: number
   valorConsulta: number
 }
