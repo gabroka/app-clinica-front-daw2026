@@ -1,11 +1,13 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { ReservasService } from "../../core/services/reservas.client";
+import { ReservasClient } from "../../core/services/reservas.client";
 import { signal } from "@angular/core";
-import { MedicosService } from "../../core/services/medicos.client";
+import { MedicosClient } from "../../core/services/medicos.client";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Medico } from "../../models/medico.model";
-import { Perfil } from "../../core/services/perfil.client";
+import { MedicoModel } from "../../models/medico.model";
+import { PerfilClient } from "../../core/services/perfil.client";
 import { MessageService } from "primeng/api";
+import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
+import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno";
 
 
 
@@ -13,13 +15,14 @@ import { MessageService } from "primeng/api";
   selector: 'app-turnos',
   templateUrl: './turnos.html',
   styleUrl: './turnos.css',
-  imports: [ReactiveFormsModule]
+  imports: [ReactiveFormsModule],
+  providers:[DialogService]
 })
 
 export class TurnosComponent implements OnInit {
   fechaMin: string = '';
   fechaMax: string = '';
-  medicos = signal<any[]>([])
+  medicos = signal<MedicoModel[]>([])
   private idPaciente: number = 0
   form: FormGroup = new FormGroup({
     nombre: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -33,10 +36,12 @@ export class TurnosComponent implements OnInit {
   cargando = signal(false)
 
 
-  private medicosService = inject(MedicosService)
-  private reservasService = inject(ReservasService)
-  private perfil = inject(Perfil)
+  private medicosClient = inject(MedicosClient)
+  private reservasClient = inject(ReservasClient)
+  private perfil = inject(PerfilClient)
   private messageService = inject(MessageService)
+  private ref: DynamicDialogRef | null=null
+  private dialogService = inject(DialogService)
 
   ngOnInit(): void {
     this.llenarDatosPaciente()
@@ -63,8 +68,8 @@ export class TurnosComponent implements OnInit {
   }
 
   buscarMedicos(): void {
-    this.medicosService.getMedicos().subscribe({
-      next: (datos: Medico[]) => {
+    this.medicosClient.getMedicos().subscribe({
+      next: (datos: MedicoModel[]) => {
         
         this.medicos.set(datos);
 
@@ -86,7 +91,7 @@ export class TurnosComponent implements OnInit {
       return
     }
     this.cargando.set(true)
-    this.reservasService.getHorariosDisponibles(medicoId, fecha).subscribe({
+    this.reservasClient.getHorariosDisponibles(medicoId, fecha).subscribe({
       next: (horarios) => {
         this.horariosDisponibles.set(horarios)
         this.cargando.set(false)
@@ -123,22 +128,54 @@ export class TurnosComponent implements OnInit {
     const fecha = this.form.get('fecha')!.value
     const hora = this.form.get('hora')!.value
     
-    this.reservasService.confirmaReserva(medicoId, this.idPaciente, fecha, hora).subscribe({
+    this.reservasClient.confirmaReserva(medicoId, this.idPaciente, fecha, hora).subscribe({
       next: (reservaId) => {
-        console.log('Reserva confirmada con ID:', typeof(reservaId), reservaId);
-        this.messageService.add({ severity: "success", summary: `Reserva confirmada con éxito, su turno es \`${reservaId.id}\`conserve su numero de turno si necesita cancelarlo` })
+        /* console.log('Reserva confirmada con ID:', typeof(reservaId), reservaId); */
+        this.messageService.add({ severity: "success", summary: `Reserva confirmada con éxito, su turno es \`${reservaId.idReserva}\`conserve su numero de turno si necesita cancelarlo` , life:5000})
 
       },
       error: (err) => {
         console.error('Error al confirmar la reserva:', err);
-        this.messageService.add({ severity: "error", summary: "Ha ocurrido un error al confirmar la reserva" })
+        this.messageService.add({ severity: "error", summary: `${err.error.message}. La reserva no se ha realizado`, life:5000})
 
       }
     });
   }
-}
+
+  cancelarTurno(){
+    const ProductListDemo=[{
+      idReserva:28,
+      idMedico:1,
+      idPaciente:3,
+      fecha:'15-10-2026 10:00'
+      }]
+      console.log('estamos en el metodo cancelarTurno de turnos.ts')
+      this.ref = this.dialogService.open(CancelarTurnoComponent, {header: 'Elija el turno que desea cancelar',data:ProductListDemo},
+              
+          );
+          
+          /* this.ref?.onClose.subscribe((data: any) => {
+            let summary_and_detail;
+            if (data) {
+                const buttonType = data?.buttonType;
+                summary_and_detail = buttonType ? { summary: 'No Product Selected', detail: `Pressed '${buttonType}' button` } : { summary: 'Product Selected', detail: data?.name };
+            } else {
+                summary_and_detail = { summary: 'No Product Selected', detail: 'Pressed Close button' };
+            }
+            this.messageService.add({ severity: 'info', ...summary_and_detail, life: 3000 });
+        }); */
+
+        /* this.ref?.onClose.subscribe(() => {}) */
+        
+        /* this.ref?.onMaximize.subscribe((value) => {
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Maximized',
+                detail: `maximized: ${value.maximized}`
+            });
+        }); */
+    }
 
 
-
-
+  }
 

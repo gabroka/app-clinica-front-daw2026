@@ -1,19 +1,20 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
-
+import { MedicoModel} from "../../models/medico.model"
 
 @Injectable({
   providedIn: "root",
 })
-export class MedicosService {
+export class MedicosClient {
   
   
 
   constructor(private http: HttpClient) { }
 
-  getMedicos(): Observable<any[]> {
-    return this.http.get<any[]>(`/api/medicos`)
+  getMedicos(): Observable<MedicoModel[]> {
+    return this.http.get<MedicoModel[]>("/api/medicos")
+
     
 
   }

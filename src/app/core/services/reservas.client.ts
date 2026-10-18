@@ -1,12 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { turnos } from "../../models/turnos.model";
-import { EstadoEnum } from "../../models/estado-enum";
-import { Reserva } from "../../models/reserva.model";
+import { TurnosModel } from "../../models/turnos.model";
+import { EstadoReservaEnum } from "../../models/estado-reserva-enum";
+import { ReservaModel } from "../../models/reserva.model";
 
 @Injectable({providedIn:'root'})
-export class ReservasService{
+export class ReservasClient{
   
 
   private http =inject(HttpClient)
@@ -18,13 +18,13 @@ export class ReservasService{
   getHorariosDisponibles(medicoId:number, fecha:string):Observable<string[]>{
 
     
-    return this.http.get<turnos[]>(`/api/reservas/medico/${medicoId}`,{
+    return this.http.get<ReservaModel[]>(`/api/reservas/medico/${medicoId}`,{
       params: {fecha}}).pipe(map(turnosOcupados =>this.calcularHorariosLibres(turnosOcupados)))
     }
   
-  private calcularHorariosLibres(turnoOcupado:turnos[]):string[]{
-    const turnoNoCancelado = turnoOcupado.filter( t=> t.estado !== EstadoEnum.CANCELADO)
-    const horaturno = turnoNoCancelado.map(t=>t.fecha_hora)
+  private calcularHorariosLibres(turnoOcupado:ReservaModel[]):string[]{
+    const turnoNoCancelado = turnoOcupado.filter( t=> t.estado !== EstadoReservaEnum.CANCELADO)
+    const horaturno = turnoNoCancelado.map(t=>t.fechaTurno)
     const horaturno1 = horaturno.map((h)=>`${h.split('T')[1].split(':00.000Z')[0]}`)
     
     const todosLosHorarios: string[] = [
@@ -34,9 +34,9 @@ export class ReservasService{
     return turnosLibres
 
   }
-confirmaReserva(id_medico:number, id_paciente:number, fecha:string, hora:string):Observable<Reserva>{
+confirmaReserva(id_medico:number, id_paciente:number, fecha:string, hora:string):Observable<ReservaModel>{
 const fecha_hora = `${fecha}T${hora}:00.000Z`
-  return this.http.post<Reserva>(`/api/reservas`,{id_medico, id_paciente, fecha_hora})
+  return this.http.post<ReservaModel>(`/api/reservas`,{id_medico, id_paciente, fecha_hora})
 
 }
 }
