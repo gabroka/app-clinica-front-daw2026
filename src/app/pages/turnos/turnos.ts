@@ -143,14 +143,12 @@ export class TurnosComponent implements OnInit {
   }
 
   cancelarTurno(){
-    const ProductListDemo=[{
-      idReserva:28,
-      idMedico:1,
-      idPaciente:3,
-      fecha:'15-10-2026 10:00'
-      }]
+    const Property={
+      titulo:"Elija el turno que desea cancelar"
+      
+      }
       console.log('estamos en el metodo cancelarTurno de turnos.ts')
-      this.ref = this.dialogService.open(CancelarTurnoComponent, {header: 'Elija el turno que desea cancelar',data:ProductListDemo},
+      this.ref = this.dialogService.open(CancelarTurnoComponent, {header: 'Elija el turno que desea cancelar',data:Property},
               
           );
           

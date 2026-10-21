@@ -55,7 +55,7 @@ div a img{
 
 /*  PORTADA */
 .portada {
-  min-height: 90vh;
+  min-height: 110vh;
   background: url("https://st.depositphotos.com/1915897/4148/i/950/depositphotos_41483009-stock-photo-waiting-area-and-surgery-rooms.jpg") no-repeat center top;
   background-size: cover;
   display: flex;

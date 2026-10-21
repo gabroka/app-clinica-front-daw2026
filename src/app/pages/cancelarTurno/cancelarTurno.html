@@ -55,7 +55,8 @@
       <td>{{ dato.medico }}</td>
       <td>{{ dato.paciente }}</td>
       <td>{{ dato.fecha }}</td>
-      <td>
+      @if(dato.btnCancelar){<td>
+        
         <p-button
           type="button"
           [text]="true"
@@ -63,7 +64,7 @@
           icon="pi pi-plus"
           (onClick)="cancelarTurno($event, dato)"
         />
-      </td>
+      </td>}
     </tr>
   </ng-template>
 </p-table>

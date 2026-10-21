@@ -37,6 +37,7 @@ export class CancelarTurnoComponent implements OnInit {
   private cancelarTurnoClient = inject(CancelarTurnoClient)
   private medicosClient = inject(MedicosClient)
 
+  
   private medicos: MedicoModel[] = []
   private usuario: any
   protected turnos: any[] = []
@@ -49,7 +50,7 @@ export class CancelarTurnoComponent implements OnInit {
   ngOnInit(): void {
     this.buscarMedicos()
     this.buscarTurnos()
-    /* this.datos = this.config.data */
+  console.log(this.config.data['property'])
 
 
   }
@@ -70,7 +71,7 @@ export class CancelarTurnoComponent implements OnInit {
 
 
   cancelarTurno(event: Event, turno: any) {
-    /* const t = turno */
+    
     this.confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: `¿Estás seguro de cancelar el turno del día ${turno.fecha}?`,
@@ -116,9 +117,9 @@ export class CancelarTurnoComponent implements OnInit {
     });
   }
 
-  private convertirFecha(fechaLatina: string): Date {
+  private convertirFecha(fecha: string): Date {
 
-    const [soloFecha, soloHora] = fechaLatina.split(', ');
+    const [soloFecha, soloHora] = fecha.split(', ');
     const [dia, mes, anio] = soloFecha.split('/');
     const fechaArreglada = `${anio}/${mes}/${dia} ${soloHora}`;
     return new Date(fechaArreglada);
@@ -132,6 +133,7 @@ export class CancelarTurnoComponent implements OnInit {
 
         if (data.rol == RolEnum.PACIENTE) {
           /* si esta logueado un paciente se obtienen sus turnos */
+          
           this.turnosClient.getTurnos(data.id).subscribe({
             next: (data: TurnosModel[]) => {
               const hoy = new Date()
@@ -148,7 +150,8 @@ export class CancelarTurnoComponent implements OnInit {
                   medico: `${t.nombreMedico} ${t.apellidoMedico}`,
                   paciente: `${this.usuario.nombres} ${this.usuario.apellidos}`,
                   idPaciente: this.usuario.id,
-                  fecha: `${t.fechaTurno}`
+                  fecha: `${t.fechaTurno}`,
+                  btnCancelar:this.config.data['property']
                 }
               })
               this.cdr.detectChanges();
@@ -168,7 +171,8 @@ export class CancelarTurnoComponent implements OnInit {
                   id: t.idReserva,
                   medico: `${t.nombreMedico} ${t.apellidoMedico}`,
                   paciente: `${idPaciente.nombres} ${idPaciente.apellidos}`,
-                  fecha: `${t.fechaTurno}`
+                  fecha: `${t.fechaTurno}`,
+                  btnCancelar:this.config.data['property']
                 }
               })
               this.cdr.detectChanges();
