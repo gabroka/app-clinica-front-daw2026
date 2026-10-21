@@ -1,29 +1,28 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { ReservasClient } from "../../core/services/reservas.client";
-import { signal } from "@angular/core";
-import { MedicosClient } from "../../core/services/medicos.client";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MedicoModel } from "../../models/medico.model";
-import { PerfilClient } from "../../core/services/perfil.client";
 import { MessageService } from "primeng/api";
 import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
+import { ReservasClient } from "../../core/services/reservas.client";
+import { MedicosClient } from "../../core/services/medicos.client";
+import { PerfilClient } from "../../core/services/perfil.client";
+import { MedicoModel } from "../../models/medico.model";
 import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno";
-
-
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-turnos',
   templateUrl: './turnos.html',
   styleUrl: './turnos.css',
   imports: [ReactiveFormsModule],
-  providers:[DialogService]
+  providers: [DialogService]
 })
-
 export class TurnosComponent implements OnInit {
+  
   fechaMin: string = '';
   fechaMax: string = '';
-  medicos = signal<MedicoModel[]>([])
-  private idPaciente: number = 0
+  medicos = signal<MedicoModel[]>([]);
+  private idPaciente: number = 0;
+
   form: FormGroup = new FormGroup({
     nombre: new FormControl({ value: '', disabled: true }, Validators.required),
     documento: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -32,150 +31,125 @@ export class TurnosComponent implements OnInit {
     fecha: new FormControl(null, Validators.required),
     hora: new FormControl(null, Validators.required)
   });
-  horariosDisponibles = signal<string[]>([])
-  cargando = signal(false)
 
+  horariosDisponibles = signal<string[]>([]);
+  cargando = signal(false);
 
-  private medicosClient = inject(MedicosClient)
-  private reservasClient = inject(ReservasClient)
-  private perfil = inject(PerfilClient)
-  private messageService = inject(MessageService)
-  private ref: DynamicDialogRef | null=null
-  private dialogService = inject(DialogService)
+  private medicosClient = inject(MedicosClient);
+  private reservasClient = inject(ReservasClient);
+  private perfil = inject(PerfilClient);
+  private messageService = inject(MessageService);
+  private ref: DynamicDialogRef | null = null;
+  private dialogService = inject(DialogService);
+  private router = inject(Router); // <--- Router inyectado para la navegación
 
   ngOnInit(): void {
-    this.llenarDatosPaciente()
-    const hoy = new Date
-    const treintaDias = new Date
-    treintaDias.setDate(hoy.getDate() + 30)
-    this.fechaMin = hoy.toISOString().split('T')[0]
-    this.fechaMax = treintaDias.toISOString().split('T')[0]
+    this.llenarDatosPaciente();
+    
+    const hoy = new Date();
+    const treintaDias = new Date();
+    treintaDias.setDate(hoy.getDate() + 30);
+    
+    this.fechaMin = hoy.toISOString().split('T')[0];
+    this.fechaMax = treintaDias.toISOString().split('T')[0];
 
-
-    this.buscarMedicos()
-
+    this.buscarMedicos();
 
     this.form.get('fecha')!.valueChanges.subscribe(() => {
-      
-      this.buscarHorarios()
-    })
-    this.form.get('medicoId')!.valueChanges.subscribe(() => {
-      const medico = (this.medicos().filter(m => m.idMedico == this.form.get('medicoId')!.value))
-      this.form.patchValue({ precioConsulta: `${medico[0].valorConsulta}` })
-      
-      this.buscarHorarios()
-    })
+      this.buscarHorarios();
+    });
+
+    this.form.get('medicoId')!.valueChanges.subscribe((idMedico) => {
+      const medico = this.medicos().find(m => m.idMedico == idMedico);
+      if (medico) {
+        this.form.patchValue({ precioConsulta: `${medico.valorConsulta}` });
+      }
+      this.buscarHorarios();
+    });
   }
 
   buscarMedicos(): void {
     this.medicosClient.getMedicos().subscribe({
       next: (datos: MedicoModel[]) => {
-        
         this.medicos.set(datos);
-
-
-
       },
       error: (err) => console.error("Error al traer médicos:", err)
-    })
+    });
   }
-
 
   buscarHorarios() {
-    const medicoId = this.form.get('medicoId')!.value
-
-    const fecha = this.form.get('fecha')!.value
+    const medicoId = this.form.get('medicoId')!.value;
+    const fecha = this.form.get('fecha')!.value;
     
     if (!medicoId || !fecha) {
-      this.horariosDisponibles.set([])
-      return
+      this.horariosDisponibles.set([]);
+      return;
     }
-    this.cargando.set(true)
+    
+    this.cargando.set(true);
     this.reservasClient.getHorariosDisponibles(medicoId, fecha).subscribe({
       next: (horarios) => {
-        this.horariosDisponibles.set(horarios)
-        this.cargando.set(false)
+        this.horariosDisponibles.set(horarios);
+        this.cargando.set(false);
       },
       error: () => {
-        this.horariosDisponibles.set([])
-        this.cargando.set(false)
-      }
-    })
-  }
-
-  private llenarDatosPaciente() {
-
-    this.perfil.getPerfil().subscribe({
-      next: (datos) => {
-        this.idPaciente = datos.id
-        this.form.patchValue({
-          nombre: `${datos.nombres} ${datos.apellidos}`,
-          documento: `${datos.documento}`,
-
-        })
-      },
-
-      error: (err) => {
-        console.log(err)
-      }
-
-    })
-
-  }
-
-  confirmarReserva() {
-    const medicoId = this.form.get('medicoId')!.value
-    const fecha = this.form.get('fecha')!.value
-    const hora = this.form.get('hora')!.value
-    
-    this.reservasClient.confirmaReserva(medicoId, this.idPaciente, fecha, hora).subscribe({
-      next: (reservaId) => {
-        /* console.log('Reserva confirmada con ID:', typeof(reservaId), reservaId); */
-        this.messageService.add({ severity: "success", summary: `Reserva confirmada con éxito, su turno es \`${reservaId.idReserva}\`conserve su numero de turno si necesita cancelarlo` , life:5000})
-
-      },
-      error: (err) => {
-        console.error('Error al confirmar la reserva:', err);
-        this.messageService.add({ severity: "error", summary: `${err.error.message}. La reserva no se ha realizado`, life:5000})
-
+        this.horariosDisponibles.set([]);
+        this.cargando.set(false);
       }
     });
   }
 
-  cancelarTurno(){
-    const ProductListDemo=[{
-      idReserva:28,
-      idMedico:1,
-      idPaciente:3,
-      fecha:'15-10-2026 10:00'
-      }]
-      console.log('estamos en el metodo cancelarTurno de turnos.ts')
-      this.ref = this.dialogService.open(CancelarTurnoComponent, {header: 'Elija el turno que desea cancelar',data:ProductListDemo},
-              
-          );
-          
-          /* this.ref?.onClose.subscribe((data: any) => {
-            let summary_and_detail;
-            if (data) {
-                const buttonType = data?.buttonType;
-                summary_and_detail = buttonType ? { summary: 'No Product Selected', detail: `Pressed '${buttonType}' button` } : { summary: 'Product Selected', detail: data?.name };
-            } else {
-                summary_and_detail = { summary: 'No Product Selected', detail: 'Pressed Close button' };
-            }
-            this.messageService.add({ severity: 'info', ...summary_and_detail, life: 3000 });
-        }); */
-
-        /* this.ref?.onClose.subscribe(() => {}) */
-        
-        /* this.ref?.onMaximize.subscribe((value) => {
-            this.messageService.add({
-                severity: 'info',
-                summary: 'Maximized',
-                detail: `maximized: ${value.maximized}`
-            });
-        }); */
-    }
-
-
+  private llenarDatosPaciente() {
+    this.perfil.getPerfil().subscribe({
+      next: (datos) => {
+        this.idPaciente = datos.id;
+        this.form.patchValue({
+          nombre: `${datos.nombres} ${datos.apellidos}`,
+          documento: `${datos.documento}`,
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
+  confirmarReserva() {
+    const medicoId = this.form.get('medicoId')!.value;
+    const fecha = this.form.get('fecha')!.value;
+    const hora = this.form.get('hora')!.value;
+    
+    this.reservasClient.confirmaReserva(medicoId, this.idPaciente, fecha, hora).subscribe({
+      next: (reservaId: any) => {
+        this.messageService.add({ 
+          severity: "success", 
+          summary: '¡Reserva confirmada!',
+          detail: `Su turno es ${reservaId.idReserva}. Conserve su número de turno si necesita cancelarlo.`, 
+          life: 5000 
+        });
+      },
+      error: (err) => {
+        console.error('Error al confirmar la reserva:', err);
+        this.messageService.add({ 
+          severity: "error", 
+          summary: `${err.error?.message || 'Error desconocido'}. La reserva no se ha realizado`, 
+          life: 5000 
+        });
+      }
+    });
+  }
+
+  cancelarTurno() {  
+    this.ref = this.dialogService.open(CancelarTurnoComponent, {
+      header: 'Elija el turno que desea cancelar',
+      width: '70%',
+      contentStyle: { overflow: 'auto' },
+      baseZIndex: 10000
+    });
+  }
+
+  // Método para volver al panel de administración
+  volverAlAdmin(): void {
+    this.router.navigate(['/admin/panel']);
+  }
+}

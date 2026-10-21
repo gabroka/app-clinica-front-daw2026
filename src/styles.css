@@ -326,3 +326,14 @@ body.dark-mode.bg-light {
   color: #080303 ;
   text-decoration: underline;
 }
+
+
+/* Forzar que el texto del título y detalle del toast de éxito sea negro */
+body .p-toast .p-toast-message.p-toast-message-success .p-toast-summary,
+body .p-toast .p-toast-message.p-toast-message-success .p-toast-detail {
+  color: #000000 !important;
+}
+
+body {
+  padding-top: 85px; /* Ajusta este valor si tu header es un poco más alto o más bajo */
+}
