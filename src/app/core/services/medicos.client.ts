@@ -20,5 +20,5 @@ export class MedicosClient {
   }
 
 actualizarMedico(id: number, data: any): Observable<any> {
-  return this.http.put<any>(`/api/medicos/${id}`, data);
+  return this.http.put<any>(`/api/medico/${id}`, data);
 }}

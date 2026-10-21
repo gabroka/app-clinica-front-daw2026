@@ -8,6 +8,14 @@
         severity="success" 
         (onClick)="irReservarTurno()">
       </p-button>
+      <!-- 🌟 Botón para ir a la página de honorarios -->
+  <p-button 
+    label="Gestionar Honorarios" 
+    icon="pi pi-dollar" 
+    severity="help" 
+    (click)="irAGestionHonorarios()">
+  </p-button>
+</div>
       <p-button 
         label="Cerrar Sesión" 
         icon="pi pi-sign-out" 
@@ -17,7 +25,6 @@
     </div>
   </div>
 
-  <p class="mb-4">Bienvenido al sistema de gestión global de turnos.</p>
 
   <!-- Tabla de Reservas del Administrador -->
   <h3 class="mb-3">Gestión de Todas las Reservas</h3>
@@ -35,7 +42,7 @@
     <ng-template pTemplate="body" let-reserva>
       <tr>
         <td>{{ reserva.idReserva || reserva.id }}</td>
-        <td>{{ reserva.nombreMedico || reserva.medico_nombre || 'N/D' }} {{ reserva.apellidoMedico || reserva.medico_apellido || '' }}</td>
+        <td>Dr/a {{ reserva.nombreMedico || reserva.medico_nombre || 'N/D' }} {{ reserva.apellidoMedico || reserva.medico_apellido || '' }}</td>
         <td>{{ reserva.nombresPaciente || reserva.paciente_nombres || 'N/D' }} {{ reserva.apellidosPaciente || reserva.paciente_apellidos || '' }}</td>
         <td>{{ reserva.fechaTurno || reserva.fecha_hora }}</td>
         <td>{{ reserva.estado }}</td>
@@ -47,7 +54,7 @@
             severity="danger" 
             size="small"
             pTooltip="Cancelar Turno"
-            (onClick)="cancelarTurnoAdmin(reserva)">
+            (click)="cancelarTurnoAdmin(reserva)">
           </p-button>
         </td>
       </tr>

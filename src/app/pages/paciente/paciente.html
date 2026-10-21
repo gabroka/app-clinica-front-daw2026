@@ -5,7 +5,7 @@
       label="Cerrar Sesión" 
       icon="pi pi-sign-out" 
       severity="danger" 
-      (onClick)="cerrarSesion()">
+      (click)="cerrarSesion()">
     </p-button>
   </div>
 
@@ -15,10 +15,11 @@
       label="Solicitar Nuevo Turno" 
       icon="pi pi-plus" 
       severity="success"
-      (onClick)="irSolicitarTurno()">
+      (click)="irSolicitarTurno()">
     </p-button>
   </div>
 
+  <!-- Tabla principal de turnos -->
   <p-table [value]="turnosPaciente()" [loading]="cargando()" responsiveLayout="scroll">
     <ng-template pTemplate="header">
       <tr>
@@ -33,7 +34,7 @@
     <ng-template pTemplate="body" let-turno>
       <tr>
         <td>{{ turno.idReserva }}</td>
-        <td>Dr/a. {{ turno.nombreMedico }} {{ turno.apellidoMedico }}</td>
+        <td>{{ turno.nombreMedico }} {{ turno.apellidoMedico }}</td>
         <td>{{ turno.fechaTurno }}</td>
         <td>${{ turno.valorConsulta }}</td>
         <td>
@@ -42,14 +43,13 @@
           </span>
         </td>
         <td>
-          <!-- Botón de cancelar solo si está ACTIVO y cumple la regla de fecha -->
           <p-button 
             *ngIf="turno.estado === 'ACTIVO'"
             label="Cancelar Turno" 
             icon="pi pi-trash" 
             severity="danger" 
             size="small"
-            (onClick)="cancelarTurno(turno)">
+            (click)="cancelarTurno(turno)">
           </p-button>
         </td>
       </tr>

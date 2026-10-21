@@ -9,6 +9,7 @@ import { AuthLayoutComponent } from './layout/auth-layout/authLayout';
 import { AdminComponent } from './pages/admin/admin';
 import { PacienteComponent } from './pages/paciente/paciente';
 import { MedicoComponent } from './pages/medico/medico';
+import { ValorconsultaComponent } from './pages/valorconsulta/valorconsulta';
 
 export const routes: Routes = [
   // Rutas públicas con diseño principal
@@ -42,6 +43,11 @@ export const routes: Routes = [
     path: 'medico/agenda',
     component: MedicoComponent
   },
+
+  { path: 'pages/valorconsulta', 
+    component: ValorconsultaComponent},
+
+  
   // Ruta por defecto o comodín
   { 
     path: '**', 

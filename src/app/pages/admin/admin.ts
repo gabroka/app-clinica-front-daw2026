@@ -25,7 +25,7 @@ export class AdminComponent implements OnInit {
   private readonly messageService = inject(MessageService);
 
   reservasAdmin = signal<any[]>([]);
-  medicosAdmin = signal<any[]>([]); // <--- Declaramos la señal aquí para que la reconozca el HTML
+  medicosAdmin = signal<any[]>([]); 
   cargando = signal(false);
 
   ngOnInit(): void {
@@ -87,6 +87,10 @@ export class AdminComponent implements OnInit {
     });
   }
 
+irAGestionHonorarios(): void {
+  this.router.navigate(['/pages/valorconsulta']); 
+}
+
   actualizarValorConsulta(medico: any, nuevoValor: number): void {
     // Priorizamos idUsuario (que es 2 para Carlos Fernández) en lugar de idMedico
     const id = medico.idUsuario || medico.id_usuario || medico.idMedico || medico.id;
@@ -124,9 +128,45 @@ export class AdminComponent implements OnInit {
     this.router.navigate(['/turnos']);
   }
 
-  cancelarTurnoAdmin(reserva: any): void {
-    // Lógica de cancelación existente...
+ 
+cancelarTurnoAdmin(reserva: any): void {
+  const fechaHoraTurno = new Date(reserva.fechaTurno || reserva.fecha_hora);
+  const ahora = new Date();
+
+  // Validar si el turno ya pasó o inició
+  if (ahora >= fechaHoraTurno) {
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'No se puede cancelar',
+      detail: 'El turno ya ha iniciado o expirado.'
+    });
+    return;
   }
+
+  const idReserva = reserva.idReserva || reserva.id;
+
+  if (confirm('¿Estás seguro de que deseas cancelar este turno?')) {
+    this.reservasClient.cancelarReservaAdmin(idReserva).subscribe({
+      next: () => {
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Éxito', 
+          detail: 'Turno cancelado correctamente.' 
+        });
+        // Refresca la tabla automáticamente usando tu método existente
+        this.cargarDatos();
+      },
+      error: (err) => {
+        console.error('Error al cancelar reserva:', err);
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Error', 
+          detail: err.error?.message || 'No se pudo cancelar la reserva.' 
+        });
+      }
+    });
+  }
+}
 
   cerrarSesion(): void {
     this.authStore.cerrarSesion();
