@@ -1,0 +1,50 @@
+<div class="p-4">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>Gestión de Honorarios Médicos</h2>
+    <p-button 
+      label="Volver al Panel Admin" 
+      icon="pi pi-arrow-left" 
+      severity="secondary" 
+      (click)="volverAlAdmin()">
+</p-button>
+  </div>
+
+  <p-table [value]="medicosAdmin()" [loading]="cargando()" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Médico</th>
+        <th>Especialidad</th>
+        <th>Valor de la Consulta ($)</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-medico>
+      <tr>
+        <td>{{ medico.nombres || medico.nombre || medico.usuario?.nombres || 'N/D' }} {{ medico.apellidos || medico.apellido || medico.usuario?.apellidos || '' }}</td>
+        <td>{{ medico.especialidad  || 'N/D' }}</td>
+        <td>
+          <input 
+            type="number" 
+            [(ngModel)]="medico.valor_consulta" 
+            class="p-inputtext p-component" 
+            style="width: 130px;" 
+            placeholder="Ej: 10000"/>
+        </td>
+        <td>
+          <p-button 
+            label="Guardar" 
+            icon="pi pi-save" 
+            size="small" 
+            severity="success"
+            (click)="actualizarValorConsulta(medico, medico.valor_consulta)">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4" class="text-center">No hay médicos registrados.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

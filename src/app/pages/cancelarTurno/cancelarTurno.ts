@@ -26,7 +26,7 @@ import { signal } from "@angular/core";
   providers: [DialogService, MessageService, ConfirmationService]
 })
 export class CancelarTurnoComponent implements OnInit {
-  private ref = inject(DynamicDialogRef);       // Para cerrarse
+  private ref = inject(DynamicDialogRef);        // Para cerrarse
   private config = inject(DynamicDialogConfig); // Para leer datos del padre
   private dialogService = inject(DialogService)
   private turnosClient = inject(TurnosClient)
@@ -42,36 +42,24 @@ export class CancelarTurnoComponent implements OnInit {
   private usuario: any
   protected turnos: any[] = []
   instance: DynamicDialog | undefined = undefined;
-  constructor() {
-    /* this.instance = this.dialogService.getInstance(this.ref) */;
-    /* this.datos = this.config.data */
-  }
+  
+  constructor() {}
 
   ngOnInit(): void {
     this.buscarMedicos()
     this.buscarTurnos()
-  console.log(this.config.data['property'])
-
-
   }
 
   buscarMedicos() {
-
     this.medicosClient.getMedicos().subscribe({
       next: (datos: MedicoModel[]) => {
-
         this.medicos = datos;
-
-
-
       },
       error: (err) => console.error("Error al traer médicos:", err)
     })
   }
 
-
   cancelarTurno(event: Event, turno: any) {
-    
     this.confirmationService.confirm({
       target: event.currentTarget as EventTarget,
       message: `¿Estás seguro de cancelar el turno del día ${turno.fecha}?`,
@@ -85,41 +73,39 @@ export class CancelarTurnoComponent implements OnInit {
         label: 'Cancel',
         severity: 'secondary',
         outlined: true,
-
       },
       acceptButtonProps: {
         label: 'Delete',
         severity: 'error',
-
       },
       accept: () => {
         console.log('estamos en aceptar del evento cancelar turno')
         const idTurno = turno.idTurno
         const idPaciente = turno.idPaciente
         const rol = this.usuario.rol
-        /* console.log('idTurno: ', idTurno, ' idPaciente: ', idPaciente, ' rol: ', rol) */
+
         this.cancelarTurnoClient.setCancelarTurno(idTurno, idPaciente, rol).subscribe({
           next: (data) => {
-            /* console.log('data del setcancelarturno: ', data) */
             this.messageService.add({ severity: 'success', summary: `${data.mensaje}`, life: 5000 })
+            
+            // Eliminamos el turno de la tabla localmente de forma instantánea
+            this.turnos = this.turnos.filter(t => t.idTurno !== idTurno);
+            this.cdr.detectChanges();
           },
           error: (err) => {
             this.messageService.add({ severity: 'error', summary: `el turno ${idTurno} no se ha cancelado`, detail: `${err.error.message}`, life: 5000 })
             console.log(err)
           }
         })
-        /* this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 }); */
       },
       reject: () => {
         console.log('estamos en el cancelar del evento cancelar turno')
-        /* this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 }); */
       }
     });
   }
 
-  private convertirFecha(fecha: string): Date {
-
-    const [soloFecha, soloHora] = fecha.split(', ');
+  private convertirFecha(fechaLatina: string): Date {
+    const [soloFecha, soloHora] = fechaLatina.split(', ');
     const [dia, mes, anio] = soloFecha.split('/');
     const fechaArreglada = `${anio}/${mes}/${dia} ${soloHora}`;
     return new Date(fechaArreglada);
@@ -128,30 +114,33 @@ export class CancelarTurnoComponent implements OnInit {
   buscarTurnos() {
     /* obtiene los datos del usuario logueado */
     this.perfilClient.getPerfil().subscribe({
-      next: (data: UsuarioModel) => {
+      next: (data: any) => {
         this.usuario = data
+        const idUsuario = data.id || data.idUsuario || data.userId;
 
-        if (data.rol == RolEnum.PACIENTE) {
+        if (!idUsuario) {
+          console.error('No se pudo encontrar el ID del usuario:', data);
+          return;
+        }
+
+        if (data.rol == RolEnum.PACIENTE || (data.rol == RolEnum.ADMINISTRADOR && !this.config.data)) {
           /* si esta logueado un paciente se obtienen sus turnos */
-          
-          this.turnosClient.getTurnos(data.id).subscribe({
-            next: (data: TurnosModel[]) => {
+          this.turnosClient.getTurnos(idUsuario).subscribe({
+            next: (turnosData: TurnosModel[]) => {
               const hoy = new Date()
               /* se eliminan los turnos viejos y los que no son activos */
-              const turnosActivos = data.filter(t => {
+              const turnosActivos = turnosData.filter(t => {
                 const fechaDelTurno = this.convertirFecha(t.fechaTurno);
                 return fechaDelTurno >= hoy && t.estado === EstadoReservaEnum.ACTIVO
               })
               
-             /*  console.log('turnos activos: ', turnosActivos) */
               this.turnos = turnosActivos.map((t: TurnosModel) => {
                 return {
                   idTurno: t.idReserva,
                   medico: `${t.nombreMedico} ${t.apellidoMedico}`,
                   paciente: `${this.usuario.nombres} ${this.usuario.apellidos}`,
-                  idPaciente: this.usuario.id,
-                  fecha: `${t.fechaTurno}`,
-                  btnCancelar:this.config.data['property']
+                  idPaciente: idUsuario,
+                  fecha: `${t.fechaTurno}`
                 }
               })
               this.cdr.detectChanges();
@@ -159,20 +148,21 @@ export class CancelarTurnoComponent implements OnInit {
             },
             error: (err: any) => console.log(err)
           })
-        } else if (data.rol == RolEnum.ADMINISTRADOR) {
-          const idPaciente = this.config.data//del administrador vendra el id del paciente que haya elegino
-          this.turnosClient.getTurnos(idPaciente).subscribe({
-            next: (data: TurnosModel[]) => {
-              /* const turnosActivos = data.filter(t => t.estado == EstadoReservaEnum.ACTIVO) */
+        } else if (data.rol == RolEnum.ADMINISTRADOR && this.config.data) {
+          const idPacienteSeleccionado = typeof this.config.data === 'object' ? this.config.data.id : this.config.data;
+          const nombrePacienteStr = typeof this.config.data === 'object' 
+            ? `${this.config.data.nombres} ${this.config.data.apellidos}` 
+            : `Paciente ID: ${idPacienteSeleccionado}`;
 
-              this.turnos = data.map((t: TurnosModel) => {
-                /* console.log('valor t dentro del map ', t) */
+          this.turnosClient.getTurnos(idPacienteSeleccionado).subscribe({
+            next: (turnosData: TurnosModel[]) => {
+              this.turnos = turnosData.map((t: TurnosModel) => {
                 return {
-                  id: t.idReserva,
+                  idTurno: t.idReserva,
                   medico: `${t.nombreMedico} ${t.apellidoMedico}`,
-                  paciente: `${idPaciente.nombres} ${idPaciente.apellidos}`,
-                  fecha: `${t.fechaTurno}`,
-                  btnCancelar:this.config.data['property']
+                  paciente: nombrePacienteStr,
+                  idPaciente: idPacienteSeleccionado,
+                  fecha: `${t.fechaTurno}`
                 }
               })
               this.cdr.detectChanges();
@@ -185,11 +175,9 @@ export class CancelarTurnoComponent implements OnInit {
       },
       error: (err) => console.log(err)
     })
-
   }
 
-
-/* funcion que cierra la ventana de dialogo dinamica de primeng */
+  /* funcion que cierra la ventana de dialogo dinamica de primeng */
   closeDialog() {
     this.ref.close();
   }

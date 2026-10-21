@@ -1,11 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
+import { AuthStore } from "../auth/auth-store"; // Ajusta la ruta relativa según corresponda
 
+@Injectable({ providedIn: "root" })
+export class LogoutService {
+  private readonly authStore = inject(AuthStore);
 
-
-@Injectable({providedIn:"root"})
-export class Logout{
-  logout(){
-    sessionStorage.clear();
-    location.reload();
+  logout() {
+    // Reutiliza directamente el método de limpieza y redirección de tu AuthStore
+    this.authStore.cerrarSesion();
   }
 }

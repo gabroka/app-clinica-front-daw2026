@@ -1,0 +1,125 @@
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { CardModule } from 'primeng/card';
+import { MessageService } from 'primeng/api';
+import { AuthStore } from '../../auth/auth-store';
+import { ReservasClient } from '../../core/services/reservas.client';
+import { PerfilClient } from '../../core/services/perfil.client';
+
+@Component({
+  selector: 'app-medico',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule, CardModule],
+  templateUrl: './medico.html',
+  styleUrl: './medico.css'
+})
+export class MedicoComponent implements OnInit {
+  private readonly authStore = inject(AuthStore);
+  private readonly reservasClient = inject(ReservasClient);
+  private readonly perfilClient = inject(PerfilClient);
+  private readonly messageService = inject(MessageService);
+
+  agendaTurnos = signal<any[]>([]);
+  cargando = signal(false);
+  idMedico: number | null = null;
+  
+  // Probar con la fecha donde están registrados los turnos activos en la BD
+  fechaConsulta: string = '2026-10-21'; 
+
+  ngOnInit(): void {
+    this.cargarPerfilYAgenda();
+  }
+
+ cargarPerfilYAgenda(): void {
+    this.cargando.set(true);
+    
+    this.perfilClient.getPerfil().subscribe({
+      next: (perfil: any) => {
+        console.log('Perfil obtenido:', perfil);
+        
+        // Mapeamos el ID de usuario al ID de la entidad médico correspondiente
+        this.idMedico = perfil.id === 2 ? 1 : (perfil.idMedico || perfil.id);
+        
+        console.log('ID de Médico mapeado para la consulta:', this.idMedico);
+        
+        if (this.idMedico) {
+          this.obtenerAgenda(this.idMedico, this.fechaConsulta);
+        } else {
+          this.cargando.set(false);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error al obtener perfil del médico:', err);
+        this.cargando.set(false);
+      }
+    });
+  }
+
+  marcarEstado(idReserva: number, nuevoEstado: 'atendido' | 'ausente'): void {
+    this.reservasClient.cambiarEstadoTurno(idReserva, nuevoEstado).subscribe({
+      next: (resp: any) => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Estado del turno actualizado' });
+        if (this.idMedico) {
+          this.obtenerAgenda(this.idMedico, this.fechaConsulta);
+        }
+      },
+      error: (err: any) => {
+        console.error('Error al cambiar el estado del turno:', err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el estado' });
+      }
+    });
+  }
+  
+  obtenerAgenda(idMedico: number, fecha: string): void {
+    this.cargando.set(true);
+    console.log('Consultando turnos para idMedico:', idMedico, 'Fecha:', fecha);
+    
+    this.reservasClient.getTurnosMedico(idMedico, fecha).subscribe({
+      next: (turnos: any) => {
+        console.log('Turnos recibidos:', turnos);
+
+        // Mapeamos los turnos para formatear la fecha y hora de forma legible
+        const turnosMapeados = (turnos || []).map((t: any) => {
+          let fechaFormateada = t.fechaTurno || t.fecha_hora;
+          if (fechaFormateada) {
+            try {
+              fechaFormateada = new Date(fechaFormateada).toLocaleString('es-AR', {
+                timeZone: 'America/Argentina/Buenos_Aires',
+                hour12: false,
+              });
+            } catch (e) {}
+          }
+
+          return {
+            ...t,
+            idReserva: t.idRreserva || t.idReserva || t.id, // Cubre posibles variantes del backend
+            fechaTurno: fechaFormateada
+          };
+        });
+
+        this.agendaTurnos.set(turnosMapeados);
+        this.cargando.set(false);
+      },
+      error: (err: any) => {
+        console.error('Error al cargar la agenda médica:', err);
+        this.agendaTurnos.set([]);
+        this.cargando.set(false);
+        this.messageService.add({ severity: 'error', summary: 'Error al cargar la agenda de turnos.' });
+      }
+    });
+  }
+
+  onFechaChange(nuevaFecha: string): void {
+    this.fechaConsulta = nuevaFecha;
+    if (this.idMedico) {
+      this.obtenerAgenda(this.idMedico, this.fechaConsulta);
+    }
+  }
+
+  cerrarSesion(): void {
+    this.authStore.cerrarSesion();
+  }
+}

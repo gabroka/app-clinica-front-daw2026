@@ -13,17 +13,13 @@ import { InputText } from "primeng/inputtext";
     templateUrl: "./login.html",
     styleUrl: "./login.css",
     imports: [ReactiveFormsModule, InputText, Password, Button],
-  
 })
 export class LoginComponent {
 
-    private readonly messageService: MessageService = inject(MessageService)
-
+    private readonly messageService: MessageService = inject(MessageService);
     private readonly loginApiClient: LoginApiClient = inject(LoginApiClient);
-
     private readonly authStore: AuthStore = inject(AuthStore);
-
-    private readonly router: Router = inject(Router)
+    private readonly router: Router = inject(Router);
 
     form: FormGroup = new FormGroup({
         nombre: new FormControl(null, Validators.required),
@@ -33,24 +29,45 @@ export class LoginComponent {
     iniciarSesion() {
 
         if (!this.form.valid) {
-            this.messageService.add({ severity: "error", summary: "Es necesario completar todos los campos del formulario para avanzar" })
-            return
+            this.messageService.add({ severity: "error", summary: "Es necesario completar todos los campos del formulario para avanzar" });
+            return;
         }
 
         const nombre: string = this.form.value.nombre;
-
         const clave: string = this.form.value.clave;
 
         this.loginApiClient.iniciarSesion(nombre, clave).subscribe({
-            next: (res)=>{
+            next: (res: any) => {
+                // 1. Guardar el token
                 this.authStore.guardarToken(res.accessToken);
-                this.router.navigateByUrl("/proyectos");
+                
+                // 2. Obtener el rol directamente de la respuesta del backend
+                const rol = res.rol || res.usuario?.rol; 
+
+                // 3. Redirigir dinámicamente según el rol
+                this.redirigirSegunRol(rol);
             },
-            error: (err)=>{
-                this.messageService.add({severity: "error", summary: "Ha ocurrido un error al iniciar sesión. Verifique las credenciales ingresadas"})
+            error: (err) => {
+                console.error(err);
+                this.messageService.add({ severity: "error", summary: "Ha ocurrido un error al iniciar sesión. Verifique las credenciales ingresadas" });
             }
         });
-
     }
 
+    private redirigirSegunRol(rol: string) {
+        switch (rol?.toUpperCase()) {
+            case 'ADMINISTRADOR':
+                this.router.navigateByUrl('/admin/panel');
+                break;
+            case 'PACIENTE':
+                this.router.navigateByUrl('/paciente/panel');
+                break;
+            case 'MEDICO':
+                this.router.navigateByUrl('/medico/agenda');
+                break;
+            default:
+                this.router.navigateByUrl('/proyectos'); 
+                break;
+        }
+    }
 }

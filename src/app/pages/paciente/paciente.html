@@ -1,0 +1,63 @@
+<div class="p-4">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2>Portal del Paciente</h2>
+    <p-button 
+      label="Cerrar Sesión" 
+      icon="pi pi-sign-out" 
+      severity="danger" 
+      (click)="cerrarSesion()">
+    </p-button>
+  </div>
+
+  <div class="flex justify-content-between align-items-center mb-3">
+    <h3>Mis Turnos Reservados</h3>
+    <p-button 
+      label="Solicitar Nuevo Turno" 
+      icon="pi pi-plus" 
+      severity="success"
+      (click)="irSolicitarTurno()">
+    </p-button>
+  </div>
+
+  <!-- Tabla principal de turnos -->
+  <p-table [value]="turnosPaciente()" [loading]="cargando()" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>N° Reserva</th>
+        <th>Médico</th>
+        <th>Fecha y Hora</th>
+        <th>Valor</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-turno>
+      <tr>
+        <td>{{ turno.idReserva }}</td>
+        <td>{{ turno.nombreMedico }} {{ turno.apellidoMedico }}</td>
+        <td>{{ turno.fechaTurno }}</td>
+        <td>${{ turno.valorConsulta }}</td>
+        <td>
+          <span class="p-badge" [ngClass]="{'p-badge-success': turno.estado === 'ACTIVO', 'p-badge-danger': turno.estado === 'CANCELADO'}">
+            {{ turno.estado }}
+          </span>
+        </td>
+        <td>
+          <p-button 
+            *ngIf="turno.estado === 'ACTIVO'"
+            label="Cancelar Turno" 
+            icon="pi pi-trash" 
+            severity="danger" 
+            size="small"
+            (click)="cancelarTurno(turno)">
+          </p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center">No posees turnos agendados por el momento.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
