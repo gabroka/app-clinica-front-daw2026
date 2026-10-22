@@ -48,9 +48,10 @@ export class ValorconsultaComponent implements OnInit {
 
   actualizarValorConsulta(medico: any, nuevoValor: number): void {
     const idMedico = medico.id || medico.idMedico;
-    const payload = { valor_consulta: nuevoValor };
+    const payload = { valorConsulta: nuevoValor };
 
     // 🌟 Usamos actualizarMedico() que es el método real de tu servicio
+    console.log('idMedico: ',idMedico,'payload: ',payload)
     this.medicosClient.actualizarMedico(idMedico, payload).subscribe({
       next: () => {
         this.messageService.add({ 

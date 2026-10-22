@@ -10,13 +10,38 @@
   >
     <div class="col-md-6">
       <label class="form-label fw-semibold">Nombre y Apellido:</label>
-      <input type="text" id="nombrePaciente" formControlName="nombre" class="form-control" required />
+      @if (rol()) {
+        <select class="form-select" formControlName="nombre">
+          @for (p of paciente(); track p.id) {
+            <option [ngValue]="p.id">
+              {{ p.nombres }} {{ p.apellidos }} DNI: {{ p.documento }}
+            </option>
+          }
+        </select>
+      } @else {
+        <input
+          type="text"
+          id="nombrePaciente"
+          formControlName="nombre"
+          class="form-control"
+          required
+        />
+      }
     </div>
-    <div class="col-md-6">
-      <label class="form-label fw-semibold">Documento:</label>
-      <input type="text" id="documentoPaciente" formControlName="documento" class="form-control" required />
-    </div>
-    
+
+    @if (!rol()) {
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Documento:</label>
+        <input
+          type="text"
+          id="documentoPaciente"
+          formControlName="documento"
+          class="form-control"
+          required
+        />
+      </div>
+    }
+
     <div class="col-md-6">
       <label class="form-label fw-semibold">Médico:</label>
       <select id="medicoSelect" class="form-select" formControlName="medicoId" required>
@@ -27,31 +52,46 @@
     </div>
     <div class="col-md-6">
       <label class="form-label fw-semibold">Valor de la consulta</label>
-      <input
-        type="text"
-        id="valorConsulta"
-        formControlName="precioConsulta"
-        class="form-control"
-      />
+      <input type="text" id="valorConsulta" formControlName="precioConsulta" class="form-control" />
     </div>
     <div class="col-md-6">
       <label class="form-label fw-semibold" for="fechaTurno">fecha:</label>
-      <input style="display:block" type="date" [min]="fechaMin" [max]="fechaMax" name="fechaTurno" id="fechaTurno" formControlName='fecha' required />
+      <input
+        style="display: block"
+        type="date"
+        [min]="fechaMin"
+        [max]="fechaMax"
+        name="fechaTurno"
+        id="fechaTurno"
+        formControlName="fecha"
+        required
+      />
     </div>
     <div class="col-md-6">
       <label class="form-label fw-semibold" for="horaTurno">Turno disponible:</label>
-      <select id="horaTurno" class="form-select" formControlName='hora' required>
-        @for(h of horariosDisponibles(); track h){
-          <option [ngValue]="h">{{h}}</option>
+      <select id="horaTurno" class="form-select" formControlName="hora" required>
+        @for (h of horariosDisponibles(); track h) {
+          <option [ngValue]="h">{{ h }}</option>
         }
       </select>
     </div>
-    
+
     <!-- Botones de acción -->
     <div class="col-12 mt-3 text-center d-flex justify-content-center gap-2 flex-wrap">
-      <button type="submit" class="btn btn-success" (click)="confirmarReserva()">Confirmar Reserva</button>
-      <button type="button" class="btn btn-danger" id="cancelarReservaBtn" (click)="cancelarTurno()">Cancelar Reserva</button>
-      <button type="button" class="btn btn-secondary" (click)="volverAlAdmin()">Volver al Admin</button>
+      <button type="submit" class="btn btn-success" (click)="confirmarReserva()">
+        Confirmar Reserva
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        id="cancelarReservaBtn"
+        (click)="cancelarTurno()"
+      >
+        Cancelar Reserva
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="volverAlAdmin()">
+        Volver al Admin
+      </button>
     </div>
   </form>
 

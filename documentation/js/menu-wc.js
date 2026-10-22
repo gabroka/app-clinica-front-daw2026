@@ -69,10 +69,16 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </div>
                         <ul class="links collapse " ${ isNormalMode ? 'id="components-links"' : 'id="xs-components-links"' }>
                             <li class="link">
+                                <a href="components/AdminComponent.html" data-type="entity-link" >AdminComponent</a>
+                            </li>
+                            <li class="link">
                                 <a href="components/App.html" data-type="entity-link" >App</a>
                             </li>
                             <li class="link">
                                 <a href="components/AuthLayoutComponent.html" data-type="entity-link" >AuthLayoutComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/CancelarTurnoComponent.html" data-type="entity-link" >CancelarTurnoComponent</a>
                             </li>
                             <li class="link">
                                 <a href="components/FooterComponent.html" data-type="entity-link" >FooterComponent</a>
@@ -87,10 +93,22 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                 <a href="components/InstitucionalComponent.html" data-type="entity-link" >InstitucionalComponent</a>
                             </li>
                             <li class="link">
+                                <a href="components/LoginComponent.html" data-type="entity-link" >LoginComponent</a>
+                            </li>
+                            <li class="link">
                                 <a href="components/MainLayoutComponent.html" data-type="entity-link" >MainLayoutComponent</a>
                             </li>
                             <li class="link">
+                                <a href="components/MedicoComponent.html" data-type="entity-link" >MedicoComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/PacienteComponent.html" data-type="entity-link" >PacienteComponent</a>
+                            </li>
+                            <li class="link">
                                 <a href="components/TurnosComponent.html" data-type="entity-link" >TurnosComponent</a>
+                            </li>
+                            <li class="link">
+                                <a href="components/ValorconsultaComponent.html" data-type="entity-link" >ValorconsultaComponent</a>
                             </li>
                         </ul>
                     </li>
@@ -103,10 +121,25 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </div>
                             <ul class="links collapse " ${ isNormalMode ? 'id="injectables-links"' : 'id="xs-injectables-links"' }>
                                 <li class="link">
-                                    <a href="injectables/MedicosService.html" data-type="entity-link" >MedicosService</a>
+                                    <a href="injectables/AuthStore.html" data-type="entity-link" >AuthStore</a>
                                 </li>
                                 <li class="link">
-                                    <a href="injectables/ReservasService.html" data-type="entity-link" >ReservasService</a>
+                                    <a href="injectables/CancelarTurnoClient.html" data-type="entity-link" >CancelarTurnoClient</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/LoginApiClient.html" data-type="entity-link" >LoginApiClient</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/MedicosClient.html" data-type="entity-link" >MedicosClient</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/PerfilClient.html" data-type="entity-link" >PerfilClient</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/ReservasClient.html" data-type="entity-link" >ReservasClient</a>
+                                </li>
+                                <li class="link">
+                                    <a href="injectables/TurnosClient.html" data-type="entity-link" >TurnosClient</a>
                                 </li>
                             </ul>
                         </li>
@@ -119,7 +152,19 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         </div>
                         <ul class="links collapse " ${ isNormalMode ? ' id="interfaces-links"' : 'id="xs-interfaces-links"' }>
                             <li class="link">
-                                <a href="interfaces/turnos.html" data-type="entity-link" >turnos</a>
+                                <a href="interfaces/CancelarTurnoModel.html" data-type="entity-link" >CancelarTurnoModel</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/MedicoModel.html" data-type="entity-link" >MedicoModel</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/ReservaModel.html" data-type="entity-link" >ReservaModel</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/TurnosModel.html" data-type="entity-link" >TurnosModel</a>
+                            </li>
+                            <li class="link">
+                                <a href="interfaces/UsuarioModel.html" data-type="entity-link" >UsuarioModel</a>
                             </li>
                         </ul>
                     </li>
@@ -133,6 +178,9 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                         <ul class="links collapse " ${ isNormalMode ? 'id="miscellaneous-links"' : 'id="xs-miscellaneous-links"' }>
                             <li class="link">
                                 <a href="miscellaneous/enumerations.html" data-type="entity-link">Enums</a>
+                            </li>
+                            <li class="link">
+                                <a href="miscellaneous/functions.html" data-type="entity-link">Functions</a>
                             </li>
                             <li class="link">
                                 <a href="miscellaneous/variables.html" data-type="entity-link">Variables</a>

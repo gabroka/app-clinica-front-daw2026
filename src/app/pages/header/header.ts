@@ -1,6 +1,6 @@
-import { Component, inject,  OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { LogoutService } from "../../auth/logout";
+/* import { LogoutService } from "../../auth/logout"; */
 
 
 @Component({
@@ -11,13 +11,13 @@ import { LogoutService } from "../../auth/logout";
 })
 export class HeaderComponent implements OnInit {
   protected isAutenticated = signal(false);
-private logout = inject(LogoutService)
+  /* private logout = inject(LogoutService) */
   ngOnInit(): void {
     this.isAutenticated.set(sessionStorage.getItem('accessToken') !== null);
-    
+
   }
 
-  cerrarSesion(){
+  /* cerrarSesion(){
     this.logout.logout()
-  }
+  } */
 }

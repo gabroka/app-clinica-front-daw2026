@@ -128,6 +128,10 @@
                 role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
         <li class="nav-item">
+            <a href="#api" class="nav-link"
+                role="tab" id="api-tab" data-bs-toggle="tab" data-link="api">API</a>
+        </li>
+        <li class="nav-item">
             <a href="#source" class="nav-link"
                 role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
@@ -165,6 +169,12 @@
 
 
 
+            <tr>
+                <td class="col-md-3">providers</td>
+                <td class="col-md-9">
+                            <code>DialogService</code>
+                </td>
+            </tr>
 
 
             <tr>
@@ -228,29 +238,217 @@
                                 <li>
                                             <code><a href="https://angular.dev/api/router/RouterLink" target="_blank" >RouterLink</a></code>
                                 </li>
+                                <li>
+                                        <code>DialogService</code>
+                                </li>
                         </ul>
                 </div>
             </div>
         </section>
 </div>
 
+    <div class="tab-pane fade " id="api">    <section data-compodoc="block-index">
+    <h3 id="index">Index</h3>
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#dialogService" >dialogService</a>
+                            </li>
+                            <li>
+                                <span class="reference-badge reference-badge--property" aria-hidden="true">P</span>
+                                    <span class="modifier">Private</span>
+                                <a href="#ref" >ref</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-sm table-bordered index-table">
+            <tbody>
+                <tr>
+                    <td class="col-md-3">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                    <td class="col-md-9">
+                        <ul class="index-list">
+                            <li>
+                                <span class="reference-badge reference-badge--method" aria-hidden="true">M</span>
+                                <a href="#verTurnos" >verTurnos</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+</section>
+
+
+
+
+
+
+    <section data-compodoc="block-methods">
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="verTurnos"></a>
+                    <span class="name">
+                        <span ><b>verTurnos</b></span>
+                        <a href="#verTurnos"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>verTurnos()</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="18"
+                                    class="link-to-prism">src/app/pages/home/home.ts:18</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section data-compodoc="block-properties">
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dialogService"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>dialogService</b></span>
+                        <a href="#dialogService"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>inject(DialogService)</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="15" class="link-to-prism">src/app/pages/home/home.ts:15</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ref"></a>
+                    <span class="name">
+                            <span class="modifier">Private</span>
+                        <span ><b>ref</b></span>
+                        <a href="#ref"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>DynamicDialogRef | null</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>null</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="16" class="link-to-prism">src/app/pages/home/home.ts:16</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+</div>
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &quot;@angular/core&quot;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, inject } from &quot;@angular/core&quot;;
 import { RouterLink } from &quot;@angular/router&quot;;
-
+import { DynamicDialogModule, DialogService, DynamicDialogRef, DynamicDialogConfig, DynamicDialog } from &#x27;primeng/dynamicdialog&#x27;;
+import { CancelarTurnoComponent } from &quot;../cancelarTurno/cancelarTurno&quot;;
 
 
 @Component({
   selector: &#x27;app-home&#x27;,
   templateUrl: &#x27;./home.html&#x27;,
   styleUrl: &#x27;./home.css&#x27;,
-  imports: [ RouterLink]
+  imports: [RouterLink],
+  providers:[DialogService]
 })
 export class HomeComponent {
+  private dialogService &#x3D; inject(DialogService)
+  private ref: DynamicDialogRef | null &#x3D; null
 
-}</code></pre>
+  verTurnos() {
+    console.log(&#x27;estamos en verturnos()&#x27;)
+    const property:boolean&#x3D;false
+     this.ref &#x3D; this.dialogService.open(CancelarTurnoComponent, { header: &#x27;Consulte su turno&#x27; ,data:property}) 
+  }
+
+
+}
+
+
+</code></pre>
     </div>
 
     <div class="tab-pane fade " id="templateData">
@@ -261,45 +459,62 @@ export class HomeComponent {
     En &lt;strong&gt;Vital Consultorios&lt;/strong&gt; ofrecemos atención médica integral para toda la familia
     con profesionales de distintas especialidades.
   &lt;/p&gt;
-  &lt;!--modifique visit/reserva en solicitar turnos --&gt;
-  &lt;a routerLink&#x3D;&quot;turnos&quot; class&#x3D;&quot;btn btn-warning btn-lg mt-3&quot;&gt;Solicitar turnos&lt;/a&gt;
+  &lt;!-- Botón de solicitud de turnos --&gt;
+  &lt;a routerLink&#x3D;&quot;/login&quot; class&#x3D;&quot;btn btn-warning btn-lg mt-3&quot;&gt;Ir a Panel de Acceso&lt;/a&gt;
 &lt;/section&gt;
 
-&lt;!-- OBRAS SOCIALES + NAVE A LAS PAGINAS --&gt;
+&lt;!-- OBRAS SOCIALES --&gt;
 &lt;section class&#x3D;&quot;obras_sociales container-fluid my-5&quot;&gt;
   &lt;h3 class&#x3D;&quot;mb-3 text-center fs-4 fs-md-3&quot;&gt;Obras Sociales&lt;/h3&gt;
   &lt;div class&#x3D;&quot;d-flex flex-wrap justify-content-center gap-2 mb-4&quot;&gt;
     &lt;a href&#x3D;&quot;https://www.osde.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;OSDE&lt;/a&gt;
-    &lt;a href&#x3D;&quot;https://www.swissmedical.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;
-      &gt;Swiss Medical&lt;/a
-    &gt;
+    &lt;a href&#x3D;&quot;https://www.swissmedical.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;Swiss Medical&lt;/a&gt;
     &lt;a href&#x3D;&quot;https://www.galeno.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;Galeno&lt;/a&gt;
     &lt;a href&#x3D;&quot;https://www.medife.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;Medifé&lt;/a&gt;
-    &lt;a href&#x3D;&quot;https://www.federada.com&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;
-      &gt;Federada Salud&lt;/a
-    &gt;
-    &lt;a href&#x3D;&quot;https://www.sancorsalud.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;
-      &gt;Sancor Salud&lt;/a
-    &gt;
+    &lt;a href&#x3D;&quot;https://www.federada.com&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;Federada Salud&lt;/a&gt;
+    &lt;a href&#x3D;&quot;https://www.sancorsalud.com.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;Sancor Salud&lt;/a&gt;
     &lt;a href&#x3D;&quot;https://www.pami.org.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;PAMI&lt;/a&gt;
     &lt;a href&#x3D;&quot;https://www.ioma.gba.gob.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;IOMA&lt;/a&gt;
     &lt;a href&#x3D;&quot;https://www.iosper.gob.ar&quot; target&#x3D;&quot;_blank&quot; class&#x3D;&quot;btn btn-info btn-sm&quot;&gt;IOSPER&lt;/a&gt;
-    &lt;!-- &lt;/section&gt; --&gt;
-    &lt;!-- EQUIPO MÉDICO --&gt;
-    &lt;section class&#x3D;&quot;catalogo container my-5&quot;&gt;
-      &lt;h3 class&#x3D;&quot;equipo_medico text-center mb-4&quot;&gt;Nuestro equipo médico&lt;/h3&gt;
-      &lt;div id&#x3D;&quot;cards&quot; class&#x3D;&quot;row g-3&quot;&gt;&lt;/div&gt;
-    &lt;/section&gt;
   &lt;/div&gt;
-
-</code></pre>
+&lt;/section&gt;</code></pre>
     </div>
 
     <div class="tab-pane fade " id="styleData">
                 <p class="comment">
                     <code>./home.css</code>
                 </p>
-                <pre class="line-numbers"><code class="language-scss"></code></pre>
+                <pre class="line-numbers"><code class="language-scss">:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 55vh;
+    max-width: 20rem;
+    width: 80vw;
+    background-color: lightcyan;
+    border-radius: 25px;
+}
+
+#nombre{
+    margin-bottom: 1rem;
+}
+
+#clave{
+    margin-bottom: 1rem;
+}
+
+#header{
+    text-align: center;
+}</code></pre>
     </div>
 
     <div class="tab-pane fade " id="tree">
@@ -327,8 +542,8 @@ export class HomeComponent {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><!-- PORTADA --><section class="portada d-flex flex-column align-items-center justify-content-center text-center">  <h3 class="fs-4 fs-sm-3 fs-md-2 fs-lg-1">Bienvenidos</h3>  <p class="p-2 p-md-3 p-lg-4">    En <strong>Vital Consultorios</strong> ofrecemos atención médica integral para toda la familia    con profesionales de distintas especialidades.  </p>  <!--modifique visit/reserva en solicitar turnos -->  <a routerLink="turnos" class="btn btn-warning btn-lg mt-3">Solicitar turnos</a></section><!-- OBRAS SOCIALES + NAVE A LAS PAGINAS --><section class="obras_sociales container-fluid my-5">  <h3 class="mb-3 text-center fs-4 fs-md-3">Obras Sociales</h3>  <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">    <a href="https://www.osde.com.ar" target="_blank" class="btn btn-info btn-sm">OSDE</a>    <a href="https://www.swissmedical.com.ar" target="_blank" class="btn btn-info btn-sm"      >Swiss Medical</a    >    <a href="https://www.galeno.com.ar" target="_blank" class="btn btn-info btn-sm">Galeno</a>    <a href="https://www.medife.com.ar" target="_blank" class="btn btn-info btn-sm">Medifé</a>    <a href="https://www.federada.com" target="_blank" class="btn btn-info btn-sm"      >Federada Salud</a    >    <a href="https://www.sancorsalud.com.ar" target="_blank" class="btn btn-info btn-sm"      >Sancor Salud</a    >    <a href="https://www.pami.org.ar" target="_blank" class="btn btn-info btn-sm">PAMI</a>    <a href="https://www.ioma.gba.gob.ar" target="_blank" class="btn btn-info btn-sm">IOMA</a>    <a href="https://www.iosper.gob.ar" target="_blank" class="btn btn-info btn-sm">IOSPER</a>    <!-- </section> -->    <!-- EQUIPO MÉDICO -->    <section class="catalogo container my-5">      <h3 class="equipo_medico text-center mb-4">Nuestro equipo médico</h3>      <div id="cards" class="row g-3"></div>    </section>  </div></div>'
-    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AuthLayoutComponent', 'selector': 'app-authLayout'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InstitucionalComponent', 'selector': 'app-institucional'},{'name': 'MainLayoutComponent', 'selector': 'app-mainLayout'},{'name': 'TurnosComponent', 'selector': 'app-turnos'}];
+        var COMPONENT_TEMPLATE = '<div><!-- PORTADA --><section class="portada d-flex flex-column align-items-center justify-content-center text-center">  <h3 class="fs-4 fs-sm-3 fs-md-2 fs-lg-1">Bienvenidos</h3>  <p class="p-2 p-md-3 p-lg-4">    En <strong>Vital Consultorios</strong> ofrecemos atención médica integral para toda la familia    con profesionales de distintas especialidades.  </p>  <!-- Botón de solicitud de turnos -->  <a routerLink="/login" class="btn btn-warning btn-lg mt-3">Ir a Panel de Acceso</a></section><!-- OBRAS SOCIALES --><section class="obras_sociales container-fluid my-5">  <h3 class="mb-3 text-center fs-4 fs-md-3">Obras Sociales</h3>  <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">    <a href="https://www.osde.com.ar" target="_blank" class="btn btn-info btn-sm">OSDE</a>    <a href="https://www.swissmedical.com.ar" target="_blank" class="btn btn-info btn-sm">Swiss Medical</a>    <a href="https://www.galeno.com.ar" target="_blank" class="btn btn-info btn-sm">Galeno</a>    <a href="https://www.medife.com.ar" target="_blank" class="btn btn-info btn-sm">Medifé</a>    <a href="https://www.federada.com" target="_blank" class="btn btn-info btn-sm">Federada Salud</a>    <a href="https://www.sancorsalud.com.ar" target="_blank" class="btn btn-info btn-sm">Sancor Salud</a>    <a href="https://www.pami.org.ar" target="_blank" class="btn btn-info btn-sm">PAMI</a>    <a href="https://www.ioma.gba.gob.ar" target="_blank" class="btn btn-info btn-sm">IOMA</a>    <a href="https://www.iosper.gob.ar" target="_blank" class="btn btn-info btn-sm">IOSPER</a>  </div></section></div>'
+    var COMPONENTS = [{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'App', 'selector': 'app-root'},{'name': 'AuthLayoutComponent', 'selector': 'app-authLayout'},{'name': 'CancelarTurnoComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InstitucionalComponent', 'selector': 'app-institucional'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MainLayoutComponent', 'selector': 'app-mainLayout'},{'name': 'MedicoComponent', 'selector': 'app-medico'},{'name': 'PacienteComponent', 'selector': 'app-paciente'},{'name': 'TurnosComponent', 'selector': 'app-turnos'},{'name': 'ValorconsultaComponent', 'selector': 'app-valorconsulta'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'HomeComponent'};
 </script>

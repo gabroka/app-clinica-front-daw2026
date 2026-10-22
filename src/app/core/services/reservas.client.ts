@@ -73,7 +73,8 @@ export class ReservasClient {
   }
 
   confirmaReserva(id_medico: number, id_paciente: number, fecha: string, hora: string): Observable<ReservaModel> {
-    const fecha_hora = `${fecha}T${hora}:00.000Z`;
+    
+    const fecha_hora = `${fecha}T${hora}`;//el back guada las horas en formato utc, al guardar corre la hora segun el uso horario de argentina
     return this.http.post<ReservaModel>(`/api/reservas`, { id_medico, id_paciente, fecha_hora });
   }
 }

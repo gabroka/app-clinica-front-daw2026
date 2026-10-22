@@ -8,7 +8,13 @@ import { UsuarioModel } from "../../models/usuario.model"
 @Injectable({providedIn:'root'})
 export class PerfilClient{
   private http =inject(HttpClient)  
+
   getPerfil():Observable<UsuarioModel>{
     return this.http.get<UsuarioModel>(`/api/auth/perfil`)
   }
+
+getPerfilPacientesActivos():Observable<UsuarioModel[]>{
+  return this.http.get<UsuarioModel[]>(`/api/usuarios/pacientes`)
+}
+
 }
