@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { MedicoModel} from "../../models/medico.model"
+import { ActualizarMedicoResponseDto } from "../../models/actualizarMedicoResponse.dto";
 
 @Injectable({
   providedIn: "root",
@@ -19,6 +20,6 @@ export class MedicosClient {
 
   }
 
-actualizarMedico(id: number, data: any): Observable<any> {
-  return this.http.put<any>(`/api/medico/${id}`, data);
+actualizarMedico(id: number, data: {}): Observable<ActualizarMedicoResponseDto> {
+  return this.http.patch<ActualizarMedicoResponseDto>(`/api/medicos/${id}/valor-consulta`, data);
 }}

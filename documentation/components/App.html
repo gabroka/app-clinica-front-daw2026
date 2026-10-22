@@ -194,6 +194,8 @@
 </div>
                         <div>    <code>ToastModule</code>
 </div>
+                        <div>        <code><a href="../components/HeaderComponent.html" target="_self" >HeaderComponent</a></code>
+</div>
                 </td>
             </tr>
 
@@ -242,6 +244,9 @@
                                 </li>
                                 <li>
                                         <code>ToastModule</code>
+                                </li>
+                                <li>
+                                            <code><a href="../components/HeaderComponent.html" target="_self" >HeaderComponent</a></code>
                                 </li>
                                 <li>
                                         <code>MessageService</code>
@@ -318,7 +323,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="13" class="link-to-prism">src/app/app.ts:13</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="14" class="link-to-prism">src/app/app.ts:14</a></div>
                         </td>
                     </tr>
 
@@ -335,8 +340,9 @@
 import { RouterOutlet } from &#x27;@angular/router&#x27;;
 import { MessageService } from &#x27;primeng/api&#x27;;
 import {ToastModule} from &#x27;primeng/toast&#x27;
+import { HeaderComponent } from &#x27;./pages/header/header&#x27;;
 @Component({
-  imports: [RouterOutlet,ToastModule],
+  imports: [RouterOutlet,ToastModule, HeaderComponent,],
   selector: &#x27;app-root&#x27;,
   styleUrl: &#x27;./app.css&#x27;,
   templateUrl: &#x27;./app.html&#x27;,
@@ -349,9 +355,9 @@ export class App {
     </div>
 
     <div class="tab-pane fade " id="templateData">
-        <pre class="line-numbers"><code class="language-html">
+        <pre class="line-numbers"><code class="language-html">&lt;app-header&gt;&lt;/app-header&gt;
 &lt;router-outlet /&gt;
-&lt;p-toast/&gt;//permite enviar mensajes de alerta a los componentes hijos</code></pre>
+&lt;p-toast/&gt;</code></pre>
     </div>
 
     <div class="tab-pane fade " id="styleData">
@@ -386,8 +392,8 @@ export class App {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><router-outlet /><p-toast/>//permite enviar mensajes de alerta a los componentes hijos</div>'
-    var COMPONENTS = [{'name': 'App', 'selector': 'app-root'},{'name': 'AuthLayoutComponent', 'selector': 'app-authLayout'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InstitucionalComponent', 'selector': 'app-institucional'},{'name': 'MainLayoutComponent', 'selector': 'app-mainLayout'},{'name': 'TurnosComponent', 'selector': 'app-turnos'}];
+        var COMPONENT_TEMPLATE = '<div><app-header></app-header><router-outlet /><p-toast/></div>'
+    var COMPONENTS = [{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'App', 'selector': 'app-root'},{'name': 'AuthLayoutComponent', 'selector': 'app-authLayout'},{'name': 'CancelarTurnoComponent', 'selector': ''},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'InstitucionalComponent', 'selector': 'app-institucional'},{'name': 'LoginComponent', 'selector': 'app-login'},{'name': 'MainLayoutComponent', 'selector': 'app-mainLayout'},{'name': 'MedicoComponent', 'selector': 'app-medico'},{'name': 'PacienteComponent', 'selector': 'app-paciente'},{'name': 'TurnosComponent', 'selector': 'app-turnos'},{'name': 'ValorconsultaComponent', 'selector': 'app-valorconsulta'}];
     var DIRECTIVES = [];
     var ACTUAL_COMPONENT = {'name': 'App'};
 </script>

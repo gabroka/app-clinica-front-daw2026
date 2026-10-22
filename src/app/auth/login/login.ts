@@ -66,7 +66,7 @@ export class LoginComponent {
                 this.router.navigateByUrl('/medico/agenda');
                 break;
             default:
-                this.router.navigateByUrl('/proyectos'); 
+                this.router.navigateByUrl('/login'); 
                 break;
         }
     }

@@ -8,7 +8,8 @@ import { PerfilClient } from "../../core/services/perfil.client";
 import { MedicoModel } from "../../models/medico.model";
 import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno";
 import { Router } from '@angular/router';
-
+import { RolEnum } from "../../models/rol-enum";
+import { UsuarioModel } from '../../models/usuario.model'
 @Component({
   selector: 'app-turnos',
   templateUrl: './turnos.html',
@@ -17,11 +18,13 @@ import { Router } from '@angular/router';
   providers: [DialogService]
 })
 export class TurnosComponent implements OnInit {
-  
+
   fechaMin: string = '';
   fechaMax: string = '';
   medicos = signal<MedicoModel[]>([]);
-  private idPaciente: number = 0;
+  protected idPaciente: number = 0;
+  protected paciente = signal<UsuarioModel[]>([])
+  protected rol = signal<boolean>(false)
 
   form: FormGroup = new FormGroup({
     nombre: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -45,11 +48,11 @@ export class TurnosComponent implements OnInit {
 
   ngOnInit(): void {
     this.llenarDatosPaciente();
-    
+
     const hoy = new Date();
     const treintaDias = new Date();
     treintaDias.setDate(hoy.getDate() + 30);
-    
+
     this.fechaMin = hoy.toISOString().split('T')[0];
     this.fechaMax = treintaDias.toISOString().split('T')[0];
 
@@ -80,12 +83,12 @@ export class TurnosComponent implements OnInit {
   buscarHorarios() {
     const medicoId = this.form.get('medicoId')!.value;
     const fecha = this.form.get('fecha')!.value;
-    
+
     if (!medicoId || !fecha) {
       this.horariosDisponibles.set([]);
       return;
     }
-    
+
     this.cargando.set(true);
     this.reservasClient.getHorariosDisponibles(medicoId, fecha).subscribe({
       next: (horarios) => {
@@ -102,11 +105,27 @@ export class TurnosComponent implements OnInit {
   private llenarDatosPaciente() {
     this.perfil.getPerfil().subscribe({
       next: (datos) => {
-        this.idPaciente = datos.id;
-        this.form.patchValue({
-          nombre: `${datos.nombres} ${datos.apellidos}`,
-          documento: `${datos.documento}`,
-        });
+        if (datos.rol == RolEnum.ADMINISTRADOR) {
+          this.rol.set(true)
+          this.perfil.getPerfilPacientesActivos().subscribe({
+            next: (pacientes: UsuarioModel[]) => {
+              this.form.get('nombre')?.enable();
+              
+              this.paciente.set(pacientes)
+            },
+            error: (err) => console.log(err)
+          })
+
+        } else if (datos.rol == RolEnum.PACIENTE) {
+          this.rol.set(false)
+          this.idPaciente = datos.id;
+          this.form.patchValue({
+            nombre: `${datos.nombres} ${datos.apellidos}`,
+            documento: `${datos.documento}`,
+          });
+        }
+
+
       },
       error: (err) => {
         console.log(err);
@@ -118,28 +137,28 @@ export class TurnosComponent implements OnInit {
     const medicoId = this.form.get('medicoId')!.value;
     const fecha = this.form.get('fecha')!.value;
     const hora = this.form.get('hora')!.value;
-    
-    this.reservasClient.confirmaReserva(medicoId, this.idPaciente, fecha, hora).subscribe({
+console.log(this.form.get('nombre')?.value)
+    this.reservasClient.confirmaReserva(medicoId, this.form.get('nombre')?.value, fecha, hora).subscribe({
       next: (reservaId: any) => {
-        this.messageService.add({ 
-          severity: "success", 
+        this.messageService.add({
+          severity: "success",
           summary: '¡Reserva confirmada!',
-          detail: `Su turno es ${reservaId.idReserva}. Conserve su número de turno si necesita cancelarlo.`, 
-          life: 5000 
+          detail: `Su turno es ${reservaId.idReserva}. Conserve su número de turno si necesita cancelarlo.`,
+          life: 5000
         });
       },
       error: (err) => {
         console.error('Error al confirmar la reserva:', err);
-        this.messageService.add({ 
-          severity: "error", 
-          summary: `${err.error?.message || 'Error desconocido'}. La reserva no se ha realizado`, 
-          life: 5000 
+        this.messageService.add({
+          severity: "error",
+          summary: `${err.error?.message || 'Error desconocido'}. La reserva no se ha realizado`,
+          life: 5000
         });
       }
     });
   }
 
-  cancelarTurno() {  
+  cancelarTurno() {
     this.ref = this.dialogService.open(CancelarTurnoComponent, {
       header: 'Elija el turno que desea cancelar',
       width: '70%',
