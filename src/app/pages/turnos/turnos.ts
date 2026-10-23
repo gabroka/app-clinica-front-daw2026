@@ -168,6 +168,15 @@ export class TurnosComponent implements OnInit {
       baseZIndex: 10000
     });
   } */
+  
+
+// Método para cerrar sesión cuando el usuario es paciente
+logout(): void {
+  // Limpia el token o los datos de sesión almacenados
+  localStorage.removeItem('token'); // Ajusta según el nombre de tu token o usa localStorage.clear()
+  this.router.navigate(['/login']); // Ajusta la ruta de tu login si es diferente
+}
+
 
   // Método para volver al panel de administración
   volverAlAdmin(): void {

@@ -75,18 +75,27 @@
         }
       </select>
     </div>
-
-    <!-- Botones de acción -->
+<!-- Botones de acción -->
     <div class="col-12 mt-3 text-center d-flex justify-content-center gap-2 flex-wrap">
-      <button type="submit" class="btn btn-success" (click)="confirmarReserva()">
+      <button type="submit" class="btn btn-success"  (click)="confirmarReserva()">
+        <i class="pi pi-check-circle"></i>
         Confirmar Reserva
       </button>
       
-      <button type="button" class="btn btn-secondary" (click)="volverAlAdmin()">
-        Volver al Admin
-      </button>
+      <!-- Botones condicionales con @if / @else -->
+      @if (rol()) {
+        <button type="button" class="btn btn-secondary" (click)="volverAlAdmin()">
+          <i class="pi pi-arrow-left"></i>
+          Volver al Admin
+        </button>
+      } @else {
+        <button type="button" class="btn btn-secondary" (click)="logout()">
+          <i class="pi pi-sign-out"></i>
+          Cerrar Sesión
+        </button>
+      }
     </div>
+  
+    <div id="resumenReserva" class="mt-5"></div>
   </form>
-
-  <div id="resumenReserva" class="mt-5"></div>
 </main>
