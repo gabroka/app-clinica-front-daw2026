@@ -55,15 +55,20 @@ div a img{
 
 /*  PORTADA */
 .portada {
-  min-height: 110vh;
+  width: 100%;
   background: url("https://st.depositphotos.com/1915897/4148/i/950/depositphotos_41483009-stock-photo-waiting-area-and-surgery-rooms.jpg") no-repeat center top;
   background-size: cover;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 80px;
+  margin-top: 0;
   text-align: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 35vh;
+  padding: 20px 10px;
 }
 
 .portada h3,
@@ -88,7 +93,6 @@ section.obras_sociales h3 {
   color:#003366;
   font-size: 1.5em;
   margin-bottom: 15px;
-  
   font-weight: 700;
 }
 .obras_sociales button {
