@@ -86,10 +86,12 @@ export class MedicoComponent implements OnInit {
           let fechaFormateada = t.fechaTurno || t.fecha_hora;
           if (fechaFormateada) {
             try {
-              fechaFormateada = new Date(fechaFormateada).toLocaleString('es-AR', {
+              fechaFormateada = new Date(fechaFormateada).toISOString()
+              fechaFormateada = `${fechaFormateada.split('T')[0]} ${fechaFormateada.split('T')[1].slice(0,5)}`
+              /* fechaFormateada = new Date(fechaFormateada).toLocaleString('es-AR', {
                 timeZone: 'America/Argentina/Buenos_Aires',
                 hour12: false,
-              });
+              }); */
             } catch (e) {}
           }
 
