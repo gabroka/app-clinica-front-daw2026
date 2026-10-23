@@ -1,7 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { DynamicDialogModule, DialogService, DynamicDialogRef, DynamicDialogConfig, DynamicDialog } from 'primeng/dynamicdialog';
-import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno";
+/* import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno"; */
 
 
 @Component({
@@ -15,11 +15,11 @@ export class HomeComponent {
   private dialogService = inject(DialogService)
   private ref: DynamicDialogRef | null = null
 
-  verTurnos() {
+  /* verTurnos() {
     console.log('estamos en verturnos()')
     const property:boolean=false
      this.ref = this.dialogService.open(CancelarTurnoComponent, { header: 'Consulte su turno' ,data:property}) 
-  }
+  } */
 
 
 }

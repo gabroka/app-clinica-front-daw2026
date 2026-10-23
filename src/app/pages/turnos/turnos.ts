@@ -6,7 +6,7 @@ import { ReservasClient } from "../../core/services/reservas.client";
 import { MedicosClient } from "../../core/services/medicos.client";
 import { PerfilClient } from "../../core/services/perfil.client";
 import { MedicoModel } from "../../models/medico.model";
-import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno";
+/* import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno"; */
 import { Router } from '@angular/router';
 import { RolEnum } from "../../models/rol-enum";
 import { UsuarioModel } from '../../models/usuario.model'
@@ -24,7 +24,7 @@ export class TurnosComponent implements OnInit {
   medicos = signal<MedicoModel[]>([]);
   protected idPaciente: number = 0;
   protected paciente = signal<UsuarioModel[]>([])
-  protected rol = signal<boolean>(false)
+  protected rol = signal<boolean>(false)//true para el administrador, false para el paciente
 
   form: FormGroup = new FormGroup({
     nombre: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -110,7 +110,7 @@ export class TurnosComponent implements OnInit {
           this.perfil.getPerfilPacientesActivos().subscribe({
             next: (pacientes: UsuarioModel[]) => {
               this.form.get('nombre')?.enable();
-              
+
               this.paciente.set(pacientes)
             },
             error: (err) => console.log(err)
@@ -137,8 +137,10 @@ export class TurnosComponent implements OnInit {
     const medicoId = this.form.get('medicoId')!.value;
     const fecha = this.form.get('fecha')!.value;
     const hora = this.form.get('hora')!.value;
-console.log(this.form.get('nombre')?.value)
-    this.reservasClient.confirmaReserva(medicoId, this.form.get('nombre')?.value, fecha, hora).subscribe({
+    const pacienteId = this.rol()? this.form.get('nombre')?.value : this.idPaciente;
+
+    console.log(this.form.get('nombre')?.value,' pacienteId: ',pacienteId)
+    this.reservasClient.confirmaReserva(medicoId, pacienteId, fecha, hora).subscribe({
       next: (reservaId: any) => {
         this.messageService.add({
           severity: "success",
@@ -158,17 +160,21 @@ console.log(this.form.get('nombre')?.value)
     });
   }
 
-  cancelarTurno() {
+  /* cancelarTurno() {
     this.ref = this.dialogService.open(CancelarTurnoComponent, {
       header: 'Elija el turno que desea cancelar',
       width: '70%',
       contentStyle: { overflow: 'auto' },
       baseZIndex: 10000
     });
-  }
+  } */
 
   // Método para volver al panel de administración
   volverAlAdmin(): void {
+    if(this.rol()){
     this.router.navigate(['/admin/panel']);
+    }else if(!this.rol()){
+      this.router.navigate(['/paciente/panel']);
+    }
   }
 }

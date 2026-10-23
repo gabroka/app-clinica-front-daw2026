@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+/* import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { DynamicDialogModule, DialogService, DynamicDialogRef, DynamicDialogConfig, DynamicDialog } from 'primeng/dynamicdialog';
@@ -113,7 +113,7 @@ export class CancelarTurnoComponent implements OnInit {
 
   buscarTurnos() {
     /* obtiene los datos del usuario logueado */
-    this.perfilClient.getPerfil().subscribe({
+    /*this.perfilClient.getPerfil().subscribe({
       next: (data: any) => {
         this.usuario = data
         const idUsuario = data.id || data.idUsuario || data.userId;
@@ -125,11 +125,11 @@ export class CancelarTurnoComponent implements OnInit {
 
         if (data.rol == RolEnum.PACIENTE || (data.rol == RolEnum.ADMINISTRADOR && !this.config.data)) {
           /* si esta logueado un paciente se obtienen sus turnos */
-          this.turnosClient.getTurnos(idUsuario).subscribe({
+         /* this.turnosClient.getTurnos(idUsuario).subscribe({
             next: (turnosData: TurnosModel[]) => {
               const hoy = new Date()
               /* se eliminan los turnos viejos y los que no son activos */
-              const turnosActivos = turnosData.filter(t => {
+           /*   const turnosActivos = turnosData.filter(t => {
                 const fechaDelTurno = this.convertirFecha(t.fechaTurno);
                 return fechaDelTurno >= hoy && t.estado === EstadoReservaEnum.ACTIVO
               })
@@ -178,7 +178,7 @@ export class CancelarTurnoComponent implements OnInit {
   }
 
   /* funcion que cierra la ventana de dialogo dinamica de primeng */
-  closeDialog() {
+  /*closeDialog() {
     this.ref.close();
   }
-}
+} */
