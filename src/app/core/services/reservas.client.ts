@@ -8,7 +8,7 @@ import { ReservaModel } from "../../models/reserva.model";
 export class ReservasClient {
   private http = inject(HttpClient);
 
-  // --- RUTAS DEL MÉDICO ---
+  //RUTAS DEL MÉDICO 
   
   // Ver agenda del médico por fecha (GET /api/reservas/medico/:idMedico?fecha=YYYY-MM-DD)
   getTurnosMedico(medicoId: number, fecha: string): Observable<any[]> {
@@ -22,7 +22,7 @@ export class ReservasClient {
     return this.http.patch<{ mensaje: string }>(`/api/reservas/medico/${idReserva}/estado`, { estado });
   }
 
-  // --- RUTAS DEL ADMINISTRADOR ---
+  // RUTAS DEL ADMINISTRADOR 
 
   // Listar todas las reservas del sistema (GET /api/reservas/admin)
   listarTodasLasReservas(): Observable<any[]> {
@@ -39,7 +39,7 @@ export class ReservasClient {
     return this.http.patch<any>(`/api/medicos/${idMedico}`, { valorConsulta });
   }
 
-  // --- RUTAS DE PACIENTE / GENERALES ---
+  //RUTAS DE PACIENTE / GENERALES  
 
   // Listar turnos por paciente (GET /api/reservas/paciente/:idPaciente)
   listarTurnosPaciente(idPaciente: number): Observable<any[]> {
@@ -74,7 +74,7 @@ export class ReservasClient {
 
   confirmaReserva(id_medico: number, id_paciente: number, fecha: string, hora: string): Observable<ReservaModel> {
     
-    const fecha_hora = `${fecha}T${hora}`;//el back guada las horas en formato utc, al guardar corre la hora segun el uso horario de argentina
+    const fecha_hora = `${fecha}T${hora}`;//
     return this.http.post<ReservaModel>(`/api/reservas`, { id_medico, id_paciente, fecha_hora });
   }
 }

@@ -6,10 +6,13 @@ import { ReservasClient } from "../../core/services/reservas.client";
 import { MedicosClient } from "../../core/services/medicos.client";
 import { PerfilClient } from "../../core/services/perfil.client";
 import { MedicoModel } from "../../models/medico.model";
-/* import { CancelarTurnoComponent } from "../cancelarTurno/cancelarTurno"; */
 import { Router } from '@angular/router';
 import { RolEnum } from "../../models/rol-enum";
 import { UsuarioModel } from '../../models/usuario.model'
+
+//Componente para la gestión y creación de reservas o turnos médicos.
+//Permite a pacientes o administradores seleccionar profesionales, fechas, horarios 
+//y confirmar citas con validaciones reactivas.
 @Component({
   selector: 'app-turnos',
   templateUrl: './turnos.html',
@@ -18,14 +21,21 @@ import { UsuarioModel } from '../../models/usuario.model'
   providers: [DialogService]
 })
 export class TurnosComponent implements OnInit {
-
+  //Fecha mínima y maxima permitida para seleccionar un turno (
   fechaMin: string = '';
-  fechaMax: string = '';
+  //30 dias a partir de hoy
+  fechaMax: string = ''; 
+  //signal reactivo que almacena el listado de médicos disponibles
   medicos = signal<MedicoModel[]>([]);
+  // Identificador único del paciente asociado a la reserva 
   protected idPaciente: number = 0;
+  // Signal reactivo que almacena la lista de pacientes activos (usado por admins)
   protected paciente = signal<UsuarioModel[]>([])
+  // Signal booleano que define el rol, true para administrador, false para paciente 
   protected rol = signal<boolean>(false)//true para el administrador, false para el paciente
 
+
+  // Formulario reactivo principal para estructurar los datos del turno
   form: FormGroup = new FormGroup({
     nombre: new FormControl({ value: '', disabled: true }, Validators.required),
     documento: new FormControl({ value: '', disabled: true }, Validators.required),
@@ -35,17 +45,22 @@ export class TurnosComponent implements OnInit {
     hora: new FormControl(null, Validators.required)
   });
 
+
+  // Signal reactivo que almacena los horarios disponibles para el médico y fecha seleccionados
   horariosDisponibles = signal<string[]>([]);
   cargando = signal(false);
 
+  // Inyección de servicios
   private medicosClient = inject(MedicosClient);
   private reservasClient = inject(ReservasClient);
   private perfil = inject(PerfilClient);
   private messageService = inject(MessageService);
   private ref: DynamicDialogRef | null = null;
   private dialogService = inject(DialogService);
-  private router = inject(Router); // <--- Router inyectado para la navegación
+  private router = inject(Router); 
 
+
+  // Configura las fechas límite, carga los datos del perfil y médicos
   ngOnInit(): void {
     this.llenarDatosPaciente();
 
@@ -58,10 +73,12 @@ export class TurnosComponent implements OnInit {
 
     this.buscarMedicos();
 
+    // Actualiza los horarios disponibles al modificar la fecha del turno
     this.form.get('fecha')!.valueChanges.subscribe(() => {
       this.buscarHorarios();
     });
 
+    // Actualiza el precio de la consulta y los horarios al cambiar de médico seleccionado
     this.form.get('medicoId')!.valueChanges.subscribe((idMedico) => {
       const medico = this.medicos().find(m => m.idMedico == idMedico);
       if (medico) {
@@ -71,6 +88,7 @@ export class TurnosComponent implements OnInit {
     });
   }
 
+  // Obtiene desde el backend el listado completo de médicos
   buscarMedicos(): void {
     this.medicosClient.getMedicos().subscribe({
       next: (datos: MedicoModel[]) => {
@@ -80,6 +98,7 @@ export class TurnosComponent implements OnInit {
     });
   }
 
+  // Consulta horarios disponibles para el médico y la fecha seleccionados en el formulario
   buscarHorarios() {
     const medicoId = this.form.get('medicoId')!.value;
     const fecha = this.form.get('fecha')!.value;
@@ -102,6 +121,8 @@ export class TurnosComponent implements OnInit {
     });
   }
 
+  // Carga la información del perfil de usuario activo 
+  // para configurar permisos y campos según su rol 
   private llenarDatosPaciente() {
     this.perfil.getPerfil().subscribe({
       next: (datos) => {
@@ -133,6 +154,7 @@ export class TurnosComponent implements OnInit {
     });
   }
 
+  //Confirma y registra la reserva del turno médico enviando los datos al servidor 
   confirmarReserva() {
     const medicoId = this.form.get('medicoId')!.value;
     const fecha = this.form.get('fecha')!.value;
@@ -160,25 +182,14 @@ export class TurnosComponent implements OnInit {
     });
   }
 
-  /* cancelarTurno() {
-    this.ref = this.dialogService.open(CancelarTurnoComponent, {
-      header: 'Elija el turno que desea cancelar',
-      width: '70%',
-      contentStyle: { overflow: 'auto' },
-      baseZIndex: 10000
-    });
-  } */
-  
-
-// Método para cerrar sesión cuando el usuario es paciente
+ 
+//Cierra la sesión activa del usuario y redirige a la vista de inicio de sesión 
 logout(): void {
-  // Limpia el token o los datos de sesión almacenados
-  localStorage.removeItem('token'); // Ajusta según el nombre de tu token o usa localStorage.clear()
-  this.router.navigate(['/login']); // Ajusta la ruta de tu login si es diferente
+  localStorage.removeItem('token'); 
+  this.router.navigate(['/login']); 
 }
 
-
-  // Método para volver al panel de administración
+// Redirige al panel correspondiente según el rol del usuario actual (Admin o Paciente)
   volverAlAdmin(): void {
     if(this.rol()){
     this.router.navigate(['/admin/panel']);

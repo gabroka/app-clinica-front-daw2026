@@ -1,4 +1,6 @@
+<!--Contenedor principal-->
 <div class="p-4">
+  <!-- Cabecera superior que alinea el título principal del portal y el botón de cierre de sesión -->
   <div class="flex justify-content-between align-items-center mb-4">
     <h2>Portal del Paciente</h2>
     <p-button 
@@ -9,6 +11,7 @@
     </p-button>
   </div>
 
+  <!-- Sección de título de turnos reservados y botón para solicitar turno nuevo -->
   <div class="flex justify-content-between align-items-center mb-3">
     <h3>Mis Turnos Reservados</h3>
     <p-button 
@@ -38,11 +41,13 @@
         <td>{{ turno.fechaTurno }}</td>
         <td>${{ turno.valorConsulta }}</td>
         <td>
+          <!-- Columna de estado con insignia dinámica según el estado del turno -->
           <span class="p-badge" [ngClass]="{'p-badge-success': turno.estado === 'ACTIVO', 'p-badge-danger': turno.estado === 'CANCELADO'}">
             {{ turno.estado }}
           </span>
         </td>
         <td>
+          <!-- Columna de acciones, permite cancelar solo si el turno está activo -->
           <p-button 
             *ngIf="turno.estado === 'ACTIVO'"
             label="Cancelar Turno" 
@@ -53,6 +58,7 @@
           </p-button>
         </td>
       </tr>
+      <!-- Plantilla que se muestra cuando el listado de turnos está vacío -->
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>

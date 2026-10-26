@@ -1,4 +1,7 @@
+<!-- Contenedor principal-->
 <div class="p-4">
+  <!-- Cabecera de sección que alinea el título principal 
+   y el botón de retorno al panel de administración -->
   <div class="flex justify-content-between align-items-center mb-4">
     <h2>Gestión de Honorarios Médicos</h2>
     <p-button 
@@ -8,8 +11,9 @@
       (click)="volverAlAdmin()">
 </p-button>
   </div>
-
+  <!-- Tabla para mostrar y editar los honorarios de los médicos -->
   <p-table [value]="medicosAdmin()" [loading]="cargando()" responsiveLayout="scroll">
+    <!-- Plantilla de la cabecera de la tabla con los títulos de cada columna -->
     <ng-template pTemplate="header">
       <tr>
         <th>Médico</th>
@@ -18,10 +22,14 @@
         <th>Acciones</th>
       </tr>
     </ng-template>
+    <!-- Plantilla para el cuerpo de la tabla -->
     <ng-template pTemplate="body" let-medico>
       <tr>
+        <!-- Nombre y apellido concatenados del médico con múltiples respaldos ante distintas estructuras de datos -->
         <td>{{ medico.nombres || medico.nombre || medico.usuario?.nombres || 'N/D' }} {{ medico.apellidos || medico.apellido || medico.usuario?.apellidos || '' }}</td>
+        <!-- Especialidad del  médico con respaldo por defecto -->
         <td>{{ medico.especialidad  || 'N/D' }}</td>
+        <!-- Campo de entrada numérico para modificar el valor de la consulta -->
         <td>
           <input 
             type="number" 
@@ -30,6 +38,7 @@
             style="width: 130px;" 
             placeholder="Ej: 10000"/>
         </td>
+        <!-- Columna de acciones con botón para guardar los cambios de honorarios -->
         <td>
           <p-button 
             label="Guardar" 
@@ -41,6 +50,7 @@
         </td>
       </tr>
     </ng-template>
+    <!-- Plantilla que se muestra cuando no hay médicos registrados en el sistema -->
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="4" class="text-center">No hay médicos registrados.</td>

@@ -7,6 +7,8 @@ import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { MedicosClient } from '../../core/services/medicos.client';
 
+
+//Componente administrativo para la gestión de honorarios médicos.
 @Component({
   selector: 'app-valorconsulta',
   standalone: true,
@@ -15,20 +17,23 @@ import { MedicosClient } from '../../core/services/medicos.client';
   styleUrl: './valorconsulta.css'
 })
 export class ValorconsultaComponent implements OnInit {
+  // Inyección de dependencias
   private readonly medicosClient = inject(MedicosClient);
   private readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
 
+  // Signals reactivos para el manejo del estado local
   medicosAdmin = signal<any[]>([]);
   cargando = signal(false);
 
+  //Dispara la carga inicial del listado de médicos
   ngOnInit(): void {
     this.cargarMedicos();
   }
 
+  //Obtiene desde el backend el listado completo de médicos registrados
   cargarMedicos(): void {
     this.cargando.set(true);
-    // 🌟 Usamos getMedicos() que es el método real de tu servicio
     this.medicosClient.getMedicos().subscribe({
       next: (medicos: any[]) => {
         this.medicosAdmin.set(medicos || []);
@@ -46,11 +51,11 @@ export class ValorconsultaComponent implements OnInit {
     });
   }
 
+  //actualiza el valor de la consulta médica enviando la nueva tarifa al servidor
   actualizarValorConsulta(medico: any, nuevoValor: number): void {
     const idMedico = medico.id || medico.idMedico;
     const payload = { valorConsulta: nuevoValor };
 
-    // 🌟 Usamos actualizarMedico() que es el método real de tu servicio
     console.log('idMedico: ',idMedico,'payload: ',payload)
     this.medicosClient.actualizarMedico(idMedico, payload).subscribe({
       next: () => {
@@ -72,6 +77,7 @@ export class ValorconsultaComponent implements OnInit {
     });
   }
 
+  //Redirige hacia el panel principal de administración
   volverAlAdmin(): void {
     this.router.navigate(['/admin/panel']);
   }

@@ -1,4 +1,6 @@
+<!-- Contenedor principal -->
 <div class="p-4">
+  <!-- Cabecera de la sección que alinea el título principal y el botón de cierre de sesión -->
   <div class="flex justify-content-between align-items-center mb-4">
     <h2>Agenda Médica</h2>
     <p-button 
@@ -19,8 +21,9 @@
       (ngModelChange)="onFechaChange($event)" 
       class="p-inputtext p-component" />
   </div>
-
+  <!-- Tabla para mostrar el listado de turnos de la agenda-->
   <p-table [value]="agendaTurnos()" [loading]="cargando()" responsiveLayout="scroll">
+    <!-- Plantilla de cabecera con los títulos de las columnas -->
     <ng-template pTemplate="header">
       <tr>
         <th>N° Reserva</th>
@@ -30,14 +33,17 @@
         <th>Acciones</th>
       </tr>
     </ng-template>
+    <!-- Plantilla para el cuerpo de la tabla que itera sobre cada turno disponible -->
     <ng-template pTemplate="body" let-turno>
       <tr>
         <td>{{ turno.idRreserva || turno.idReserva || turno.id }}</td>
         <td>{{ turno.nombresPaciente || turno.paciente_nombres || '' }} {{ turno.apellidosPaciente || turno.paciente_apellidos || '' }}</td>
         <td>{{ turno.fechaTurno || turno.fecha_hora }}</td>
         <td>{{ turno.estado }}</td>
+        <!-- Columna de acciones con botones para actualizar el estado del turno -->
         <td>
           <div class="flex gap-2">
+            <!-- Botón para marcar el turno como atendido -->
             <p-button 
               label="Atendido" 
               icon="pi pi-check" 
@@ -45,6 +51,7 @@
               size="small"
               (onClick)="marcarEstado(turno.idRreserva || turno.idReserva || turno.id, 'atendido')">
             </p-button>
+            <!-- Botón para marcar el turno como ausente -->
             <p-button 
               label="Ausente" 
               icon="pi pi-times" 
@@ -56,6 +63,7 @@
         </td>
       </tr>
     </ng-template>
+    <!-- Plantilla que se muestra cuando la lista de turnos está vacía -->
     <ng-template pTemplate="emptymessage">
       <tr>
         <td colspan="5" class="text-center">No posee turnos agendados en su agenda para la fecha seleccionada.</td>

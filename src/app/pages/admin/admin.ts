@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // <--- Importante para [(ngModel)]
+import { FormsModule } from '@angular/forms'; // 
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -10,28 +10,35 @@ import { MedicosClient } from '../../core/services/medicos.client';
 import { AuthStore } from '../../auth/auth-store';
 import { forkJoin } from 'rxjs';
 
+//Componente principal del panel de administración
+//Permite visualizar y gestionar reservas, consultar médicos y administrar valores de consulta
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule], // <--- Asegúrate de incluir FormsModule aquí
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule], 
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
 export class AdminComponent implements OnInit {
+
+  // Inyección de dependencias
   private readonly reservasClient = inject(ReservasClient);
   private readonly medicosClient = inject(MedicosClient);
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly messageService = inject(MessageService);
 
+  // Signals reactivos para gestionar el estado local del componente
   reservasAdmin = signal<any[]>([]);
   medicosAdmin = signal<any[]>([]); 
   cargando = signal(false);
 
+  //Dispara la carga inicial de datos
   ngOnInit(): void {
     this.cargarDatos();
   }
 
+  //* Carga simultáneamente el listado de reservas y médicos desde el backend
   cargarDatos(): void {
     this.cargando.set(true);
 
@@ -40,7 +47,7 @@ export class AdminComponent implements OnInit {
       medicos: this.medicosClient.getMedicos()
     }).subscribe({
       next: ({ reservas, medicos }) => {
-        // 1. Guardamos la lista de médicos en su señal respectiva
+        // Guarda la lista de médicos 
         this.medicosAdmin.set(medicos || []);
 
         // Mapa de médicos para búsqueda rápida por ID en reservas
@@ -50,7 +57,7 @@ export class AdminComponent implements OnInit {
           medicosMap.set(id, m);
         });
 
-        // 2. Mapeo de reservas (con tu lógica existente)
+        // Mapeo de reservas 
         const reservasMapeadas = (reservas || []).map((r: any) => {
           let fechaFormateada = r.fecha_hora || r.fechaTurno;
           if (fechaFormateada) {
@@ -87,12 +94,14 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  //Navega hacia la vista de gestión de honorarios
 irAGestionHonorarios(): void {
   this.router.navigate(['/pages/valorconsulta']); 
 }
 
+  //Actualiza el valor de la consulta médica para un profesional
   actualizarValorConsulta(medico: any, nuevoValor: number): void {
-    // Priorizamos idUsuario (que es 2 para Carlos Fernández) en lugar de idMedico
+    // 
     const id = medico.idUsuario || medico.id_usuario || medico.idMedico || medico.id;
     
     console.log('ID seleccionado para actualizar:', id);
@@ -116,7 +125,8 @@ irAGestionHonorarios(): void {
     this.medicosClient.actualizarMedico(id, datosActualizados).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Valor de consulta actualizado correctamente.' });
-        this.cargarDatos(); // Recarga la tabla con los datos actualizados
+        // Recarga la tabla con los datos actualizados
+        this.cargarDatos(); 
       },
       error: (err) => {
         console.error('Error detallado al actualizar médico:', err);
@@ -124,16 +134,17 @@ irAGestionHonorarios(): void {
       }
     });
   }
+  //Navega hacia la vista de reserva de turnos
   irReservarTurno(): void {
     this.router.navigate(['/turnos']);
   }
 
- 
+//Permite al administrador cancelar un turno 
 cancelarTurnoAdmin(reserva: any): void {
   const fechaHoraTurno = new Date(reserva.fechaTurno || reserva.fecha_hora);
   const ahora = new Date();
 
-  // Validar si el turno ya pasó o inició
+  // Valida si el turno ya pasó o inició
   if (ahora >= fechaHoraTurno) {
     this.messageService.add({
       severity: 'warn',
@@ -153,7 +164,7 @@ cancelarTurnoAdmin(reserva: any): void {
           summary: 'Éxito', 
           detail: 'Turno cancelado correctamente.' 
         });
-        // Refresca la tabla automáticamente usando tu método existente
+        // Refresca la tabla automáticamente
         this.cargarDatos();
       },
       error: (err) => {
@@ -168,6 +179,7 @@ cancelarTurnoAdmin(reserva: any): void {
   }
 }
 
+  //Cierra la sesión activa del administrador y redirige al login 
   cerrarSesion(): void {
     this.authStore.cerrarSesion();
   }

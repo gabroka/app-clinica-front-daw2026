@@ -3,36 +3,45 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { DialogModule } from 'primeng/dialog'; // <--- Importante para el modal
+import { DialogModule } from 'primeng/dialog'; 
 import { MessageService } from 'primeng/api';
 import { PerfilClient } from '../../core/services/perfil.client';
 import { ReservasClient } from '../../core/services/reservas.client';
 import { AuthStore } from '../../auth/auth-store';
 
+//Componente correspondiente al portal del paciente. Permite visualizar 
+//los turnos reservados, solicitar nuevos turnos, cancelar reservas vigentes 
+// y controlar la sesión.
 @Component({
   selector: 'app-paciente',
   standalone: true,
-  imports: [CommonModule, ButtonModule, TableModule, DialogModule], // <--- Agregar DialogModule aquí
+  imports: [CommonModule, ButtonModule, TableModule, DialogModule], 
   templateUrl: './paciente.html',
   styleUrl: './paciente.css'
 })
 export class PacienteComponent implements OnInit {
+  // Inyección de dependencias
   private readonly router = inject(Router);
   private readonly perfilClient = inject(PerfilClient);
   private readonly reservasClient = inject(ReservasClient);
   private readonly messageService = inject(MessageService);
   private readonly authStore = inject(AuthStore);
 
+  // Signals reactivos para la gestión del estado local del componente
   turnosPaciente = signal<any[]>([]);
   cargando = signal(false);
   
-  // 🌟 Controla la visibilidad de la ventana modal
+  // Controla la visibilidad de la ventana modal
   verModalCancelar = signal(false);
-
+  
+  //Dispara la carga inicial de los turnos del paciente
   ngOnInit(): void {
     this.cargarTurnosPaciente();
   }
 
+
+  //Obtiene el perfil del usuario autenticado para recuperar su identificador 
+  // y solicita el listado de turnos asociados al paciente desde el servidor
   cargarTurnosPaciente(): void {
     this.cargando.set(true);
     this.perfilClient.getPerfil().subscribe({
@@ -61,11 +70,12 @@ export class PacienteComponent implements OnInit {
     });
   }
 
+  // Navega hacia la vista de solicitud de nuevos turnos médicos
   irSolicitarTurno(): void {
     this.router.navigate(['/turnos']);
   }
 
-  // 🌟 Métodos para abrir y cerrar el modal
+  // Métodos para abrir y cerrar el modal
   abrirModalCancelar(): void {
     this.verModalCancelar.set(true);
   }
@@ -74,6 +84,8 @@ export class PacienteComponent implements OnInit {
     this.verModalCancelar.set(false);
   }
 
+  //Valida que el turno no haya expirado y procede a cancelar la reserva seleccionada 
+  //actualizando el listado posteriormente
   cancelarTurno(reserva: any): void {
     const fechaHoraTurno = new Date(reserva.fechaTurno || reserva.fecha_hora);
     const ahora = new Date();
@@ -96,7 +108,7 @@ export class PacienteComponent implements OnInit {
             next: () => {
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Turno cancelado correctamente.' });
               this.cargarTurnosPaciente();
-              this.cerrarModalCancelar(); // Cierra el modal tras cancelar con éxito
+              this.cerrarModalCancelar(); 
             },
             error: (err) => {
               console.error('Error al cancelar reserva:', err);
@@ -108,6 +120,7 @@ export class PacienteComponent implements OnInit {
     }
   }
 
+  //Cierra la sesión activa del paciente y redirige al login 
   cerrarSesion(): void {
     this.authStore.cerrarSesion();
   }

@@ -1,10 +1,6 @@
 import { EstadoReservaEnum } from "./estado-reserva-enum"
 
-
-
-/* "fecha_hora": "2026-09-29T16:00:00.000Z" */
-/* turnos de un paciente especifico api/reservas/paciente/${+id} */
-
+//Interfaz que define la estructura detallada de un turno o reserva médica
 export interface TurnosModel {
   idReserva: number
   idPaciente: number
@@ -15,16 +11,3 @@ export interface TurnosModel {
   estado: EstadoReservaEnum
 }
 
-/* export interface TurnosModel {
-  id: number
-  medico: {
-    id: number
-    idUsuario: number
-    matricula: number
-    valorConsulta: number
-  }
-  fecha_hora: string
-  valor_Consulta: number
-  estado: EstadoReservaEnum
-
-} */

@@ -9,6 +9,8 @@ import { AuthStore } from '../../auth/auth-store';
 import { ReservasClient } from '../../core/services/reservas.client';
 import { PerfilClient } from '../../core/services/perfil.client';
 
+//Componente del panel del médico. Permite visualizar la agenda 
+// de turnos filtrada por fecha, gestionar el estado de atención de los pacientes
 @Component({
   selector: 'app-medico',
   standalone: true,
@@ -17,22 +19,30 @@ import { PerfilClient } from '../../core/services/perfil.client';
   styleUrl: './medico.css'
 })
 export class MedicoComponent implements OnInit {
+
+  //// Inyección de dependencias
   private readonly authStore = inject(AuthStore);
   private readonly reservasClient = inject(ReservasClient);
   private readonly perfilClient = inject(PerfilClient);
   private readonly messageService = inject(MessageService);
 
+  //// Signals reactivos para el manejo de estados locales
   agendaTurnos = signal<any[]>([]);
   cargando = signal(false);
+
+  //Identificador único del médico logueado en el sistema
   idMedico: number | null = null;
   
   // Probar con la fecha donde están registrados los turnos activos en la BD
   fechaConsulta: string = '2026-10-21'; 
 
+  //Dispara la carga inicial del perfil del medico y su agenda asociada
   ngOnInit(): void {
     this.cargarPerfilYAgenda();
   }
 
+ //Obtiene el perfil del usuario autenticado, mapea el identificador correspondiente 
+//al médico y solicita la agenda de turnos inicial. 
  cargarPerfilYAgenda(): void {
     this.cargando.set(true);
     
@@ -73,6 +83,8 @@ export class MedicoComponent implements OnInit {
     });
   }
   
+  //Consulta y carga la lista de turnos agendados para un médico y fecha determinada,
+  //formateando las fechas para su correcta visualización.
   obtenerAgenda(idMedico: number, fecha: string): void {
     this.cargando.set(true);
     console.log('Consultando turnos para idMedico:', idMedico, 'Fecha:', fecha);
@@ -88,10 +100,6 @@ export class MedicoComponent implements OnInit {
             try {
               fechaFormateada = new Date(fechaFormateada).toISOString()
               fechaFormateada = `${fechaFormateada.split('T')[0]} ${fechaFormateada.split('T')[1].slice(0,5)}`
-              /* fechaFormateada = new Date(fechaFormateada).toLocaleString('es-AR', {
-                timeZone: 'America/Argentina/Buenos_Aires',
-                hour12: false,
-              }); */
             } catch (e) {}
           }
 
@@ -114,6 +122,7 @@ export class MedicoComponent implements OnInit {
     });
   }
 
+  // Maneja el evento de cambio de fecha en el selector y recarga la agenda médica.
   onFechaChange(nuevaFecha: string): void {
     this.fechaConsulta = nuevaFecha;
     if (this.idMedico) {
@@ -121,6 +130,7 @@ export class MedicoComponent implements OnInit {
     }
   }
 
+  //Cierra la sesión activa del profesional médico y redirige al login /
   cerrarSesion(): void {
     this.authStore.cerrarSesion();
   }

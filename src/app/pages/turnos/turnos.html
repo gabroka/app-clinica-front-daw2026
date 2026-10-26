@@ -1,13 +1,13 @@
 <!-- FORMULARIO -->
 <main class="container my-5">
   <h2 class="text-center text-primary mb-4 fw-bold">Formulario de Reserva</h2>
-
+  <!-- Formulario reactivo vinculado a la propiedad form mediante [formGroup] -->
   <form
     [formGroup]="form"
     id="formReserva"
     class="card row g-3 p-4 shadow"
-    style="background-color: #e8fdf7; border: 2px solid #31a387"
-  >
+    style="background-color: #e8fdf7; border: 2px solid #31a387">
+    <!-- Campo de Nombre y Apellido: renderizado condicional según el rol del usuario -->
     <div class="col-md-6">
       <label class="form-label fw-semibold">Nombre y Apellido:</label>
       @if (rol()) {
@@ -28,7 +28,7 @@
         />
       }
     </div>
-
+    <!-- Campo de Documento, se muestra únicamente si el usuario no es administrador-->
     @if (!rol()) {
       <div class="col-md-6">
         <label class="form-label fw-semibold">Documento:</label>
@@ -42,6 +42,7 @@
       </div>
     }
 
+    <!-- Selector desplegable para elegir el profesional médico -->
     <div class="col-md-6">
       <label class="form-label fw-semibold">Médico:</label>
       <select id="medicoSelect" class="form-select" formControlName="medicoId" required>
@@ -50,10 +51,14 @@
         }
       </select>
     </div>
+
+    <!-- Campo de solo lectura o edición para el valor monetario de la consulta -->
     <div class="col-md-6">
       <label class="form-label fw-semibold">Valor de la consulta</label>
       <input type="text" id="valorConsulta" formControlName="precioConsulta" class="form-control" />
     </div>
+
+    <!-- Selector de fecha con restricciones de fecha mínima y máxima -->
     <div class="col-md-6">
       <label class="form-label fw-semibold" for="fechaTurno">fecha:</label>
       <input
@@ -67,6 +72,8 @@
         required
       />
     </div>
+
+    <!-- Selector de horarios disponibles para el turno seleccionado -->
     <div class="col-md-6">
       <label class="form-label fw-semibold" for="horaTurno">Turno disponible:</label>
       <select id="horaTurno" class="form-select" formControlName="hora" required>
@@ -95,7 +102,6 @@
         </button>
       }
     </div>
-  
     <div id="resumenReserva" class="mt-5"></div>
   </form>
 </main>

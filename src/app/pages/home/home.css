@@ -1,3 +1,4 @@
+/* Estilos aplicados al elemento raíz*/
 :host {
     display: block;
     flex-direction: column;
@@ -7,6 +8,7 @@
     
 }
 
+/*Contenedor principal */
 #main {
     display: flex;
     flex-direction: column;
@@ -19,14 +21,17 @@
     border-radius: 25px;
 }
 
+/* Espaciado inferior para el campo usuario*/
 #nombre{
     margin-bottom: 1rem;
 }
 
+/* Espaciado inferior para el campo contraseña */
 #clave{
     margin-bottom: 1rem;
 }
 
+/* Estilo para la sección de cabecera */
 #header{
     text-align: center;
 }
