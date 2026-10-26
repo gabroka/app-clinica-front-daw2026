@@ -1,6 +1,6 @@
 /* lo que me devuelve la ruta /api/medicos */
 export interface MedicoModel {
-  idMedico: Number
+  idMedico: number
   idUsuario: number
   nombre: string
   apellido: string

@@ -8,6 +8,10 @@ import { MessageService } from 'primeng/api';
 import { AuthStore } from '../../auth/auth-store';
 import { ReservasClient } from '../../core/services/reservas.client';
 import { PerfilClient } from '../../core/services/perfil.client';
+import { TurnosMedicoModel } from '../../models/turnosMedico.model';
+import { MedicosClient } from '../../core/services/medicos.client';
+import { MedicoModel } from '../../models/medico.model';
+import { UsuarioModel } from '../../models/usuario.model';
 
 //Componente del panel del médico. Permite visualizar la agenda 
 // de turnos filtrada por fecha, gestionar el estado de atención de los pacientes
@@ -25,41 +29,49 @@ export class MedicoComponent implements OnInit {
   private readonly reservasClient = inject(ReservasClient);
   private readonly perfilClient = inject(PerfilClient);
   private readonly messageService = inject(MessageService);
-
+  private readonly medicos = inject(MedicosClient)
   //// Signals reactivos para el manejo de estados locales
   agendaTurnos = signal<any[]>([]);
   cargando = signal(false);
 
   //Identificador único del médico logueado en el sistema
   idMedico: number | null = null;
-  
+  protected medico = signal<MedicoModel[]> ([])
   // Probar con la fecha donde están registrados los turnos activos en la BD
-  fechaConsulta: string = '2026-10-21'; 
+  fechaConsulta: string = new Date().toISOString().slice(0, 10);
 
   //Dispara la carga inicial del perfil del medico y su agenda asociada
   ngOnInit(): void {
     this.cargarPerfilYAgenda();
   }
 
- //Obtiene el perfil del usuario autenticado, mapea el identificador correspondiente 
-//al médico y solicita la agenda de turnos inicial. 
- cargarPerfilYAgenda(): void {
+  //Obtiene el perfil del usuario autenticado, mapea el identificador correspondiente 
+  //al médico y solicita la agenda de turnos inicial. 
+  cargarPerfilYAgenda(): void {
     this.cargando.set(true);
-    
+
     this.perfilClient.getPerfil().subscribe({
-      next: (perfil: any) => {
-        console.log('Perfil obtenido:', perfil);
-        
+      next: (perfil: UsuarioModel) => {
+        /* console.log('Perfil obtenido:', perfil); */
+
         // Mapeamos el ID de usuario al ID de la entidad médico correspondiente
-        this.idMedico = perfil.id === 2 ? 1 : (perfil.idMedico || perfil.id);
-        
-        console.log('ID de Médico mapeado para la consulta:', this.idMedico);
-        
-        if (this.idMedico) {
-          this.obtenerAgenda(this.idMedico, this.fechaConsulta);
-        } else {
-          this.cargando.set(false);
-        }
+        /* this.idMedico = perfil.id === 2 ? 1 : (perfil.idMedico || perfil.id); */
+        this.medicos.getMedicos().subscribe({
+          next: (medicos: MedicoModel[]) => {
+            /* console.log('ID de Médico mapeado para la consulta:', medicos); */
+            this.medico.set(medicos.filter(m => m.idUsuario == perfil.id))  
+           /*  console.log('medico: ', this.medico()) */
+            this.idMedico = this.medico()[0].idMedico
+            if (this.idMedico) {
+              this.obtenerAgenda(this.idMedico, this.fechaConsulta);
+            } else {
+              this.cargando.set(false);
+            }
+          },
+          error: (error) => console.log('error al obtener el medico logueado',error)
+        })
+
+
       },
       error: (err: any) => {
         console.error('Error al obtener perfil del médico:', err);
@@ -70,7 +82,7 @@ export class MedicoComponent implements OnInit {
 
   marcarEstado(idReserva: number, nuevoEstado: 'atendido' | 'ausente'): void {
     this.reservasClient.cambiarEstadoTurno(idReserva, nuevoEstado).subscribe({
-      next: (resp: any) => {
+      next: (resp: { mensaje: string }) => {
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Estado del turno actualizado' });
         if (this.idMedico) {
           this.obtenerAgenda(this.idMedico, this.fechaConsulta);
@@ -82,16 +94,16 @@ export class MedicoComponent implements OnInit {
       }
     });
   }
-  
+
   //Consulta y carga la lista de turnos agendados para un médico y fecha determinada,
   //formateando las fechas para su correcta visualización.
   obtenerAgenda(idMedico: number, fecha: string): void {
     this.cargando.set(true);
-    console.log('Consultando turnos para idMedico:', idMedico, 'Fecha:', fecha);
-    
+    /* console.log('Consultando turnos para idMedico:', idMedico, 'Fecha:', fecha); */
+
     this.reservasClient.getTurnosMedico(idMedico, fecha).subscribe({
-      next: (turnos: any) => {
-        console.log('Turnos recibidos:', turnos);
+      next: (turnos: TurnosMedicoModel[]) => {
+        /* console.log('Turnos recibidos:', turnos); */
 
         // Mapeamos los turnos para formatear la fecha y hora de forma legible
         const turnosMapeados = (turnos || []).map((t: any) => {
@@ -99,8 +111,8 @@ export class MedicoComponent implements OnInit {
           if (fechaFormateada) {
             try {
               fechaFormateada = new Date(fechaFormateada).toISOString()
-              fechaFormateada = `${fechaFormateada.split('T')[0]} ${fechaFormateada.split('T')[1].slice(0,5)}`
-            } catch (e) {}
+              fechaFormateada = `${fechaFormateada.split('T')[0]} ${fechaFormateada.split('T')[1].slice(0, 5)}`
+            } catch (e) { }
           }
 
           return {

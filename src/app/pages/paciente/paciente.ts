@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { PerfilClient } from '../../core/services/perfil.client';
 import { ReservasClient } from '../../core/services/reservas.client';
 import { AuthStore } from '../../auth/auth-store';
+import { UsuarioModel } from '../../models/usuario.model';
 
 //Componente correspondiente al portal del paciente. Permite visualizar 
 //los turnos reservados, solicitar nuevos turnos, cancelar reservas vigentes 
@@ -45,11 +46,11 @@ export class PacienteComponent implements OnInit {
   cargarTurnosPaciente(): void {
     this.cargando.set(true);
     this.perfilClient.getPerfil().subscribe({
-      next: (usuario: any) => {
+      next: (usuario: UsuarioModel) => {
         const idUsuario = usuario.id; 
         if (idUsuario) {
           this.reservasClient.listarTurnosPaciente(idUsuario).subscribe({
-            next: (turnos) => {
+            next: (turnos:string[]) => {
               this.turnosPaciente.set(turnos || []);
               this.cargando.set(false);
             },

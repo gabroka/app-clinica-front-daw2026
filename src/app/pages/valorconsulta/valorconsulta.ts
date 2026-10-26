@@ -52,11 +52,11 @@ export class ValorconsultaComponent implements OnInit {
   }
 
   //actualiza el valor de la consulta médica enviando la nueva tarifa al servidor
-  actualizarValorConsulta(medico: any, nuevoValor: number): void {
+  actualizarValorConsulta(medico:any, nuevoValor: number): void {
     const idMedico = medico.id || medico.idMedico;
     const payload = { valorConsulta: nuevoValor };
 
-    console.log('idMedico: ',idMedico,'payload: ',payload)
+    /* console.log('idMedico: ',idMedico,'payload: ',payload) */
     this.medicosClient.actualizarMedico(idMedico, payload).subscribe({
       next: () => {
         this.messageService.add({ 

@@ -3,6 +3,7 @@ import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { EstadoReservaEnum } from "../../models/estado-reserva-enum";
 import { ReservaModel } from "../../models/reserva.model";
+import { TurnosMedicoModel } from "../../models/turnosMedico.model";
 
 @Injectable({ providedIn: 'root' })
 export class ReservasClient {
@@ -11,8 +12,8 @@ export class ReservasClient {
   //RUTAS DEL MÉDICO 
   
   // Ver agenda del médico por fecha (GET /api/reservas/medico/:idMedico?fecha=YYYY-MM-DD)
-  getTurnosMedico(medicoId: number, fecha: string): Observable<any[]> {
-    return this.http.get<any[]>(`/api/reservas/medico/${medicoId}`, {
+  getTurnosMedico(medicoId: number, fecha: string): Observable<TurnosMedicoModel[]> {
+    return this.http.get<TurnosMedicoModel[]>(`/api/reservas/medico/${medicoId}`, {
       params: { fecha }
     });
   }

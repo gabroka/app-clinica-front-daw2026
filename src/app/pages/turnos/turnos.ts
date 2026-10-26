@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MessageService } from "primeng/api";
-import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
 import { ReservasClient } from "../../core/services/reservas.client";
 import { MedicosClient } from "../../core/services/medicos.client";
 import { PerfilClient } from "../../core/services/perfil.client";
@@ -9,6 +8,8 @@ import { MedicoModel } from "../../models/medico.model";
 import { Router } from '@angular/router';
 import { RolEnum } from "../../models/rol-enum";
 import { UsuarioModel } from '../../models/usuario.model'
+import { AuthStore } from "../../auth/auth-store";
+import { ReservaModel } from "../../models/reserva.model";
 
 //Componente para la gestión y creación de reservas o turnos médicos.
 //Permite a pacientes o administradores seleccionar profesionales, fechas, horarios 
@@ -18,7 +19,7 @@ import { UsuarioModel } from '../../models/usuario.model'
   templateUrl: './turnos.html',
   styleUrl: './turnos.css',
   imports: [ReactiveFormsModule],
-  providers: [DialogService]
+  providers: []
 })
 export class TurnosComponent implements OnInit {
   //Fecha mínima y maxima permitida para seleccionar un turno (
@@ -55,10 +56,8 @@ export class TurnosComponent implements OnInit {
   private reservasClient = inject(ReservasClient);
   private perfil = inject(PerfilClient);
   private messageService = inject(MessageService);
-  private ref: DynamicDialogRef | null = null;
-  private dialogService = inject(DialogService);
   private router = inject(Router); 
-
+private auth=inject (AuthStore)
 
   // Configura las fechas límite, carga los datos del perfil y médicos
   ngOnInit(): void {
@@ -134,7 +133,7 @@ export class TurnosComponent implements OnInit {
 
               this.paciente.set(pacientes)
             },
-            error: (err) => console.log(err)
+            error: (err) => console.log('error al obtener lista de pacientes: ',err)
           })
 
         } else if (datos.rol == RolEnum.PACIENTE) {
@@ -149,7 +148,7 @@ export class TurnosComponent implements OnInit {
 
       },
       error: (err) => {
-        console.log(err);
+        console.log('error al recibir usuario logueado: ',err);
       }
     });
   }
@@ -161,9 +160,9 @@ export class TurnosComponent implements OnInit {
     const hora = this.form.get('hora')!.value;
     const pacienteId = this.rol()? this.form.get('nombre')?.value : this.idPaciente;
 
-    console.log(this.form.get('nombre')?.value,' pacienteId: ',pacienteId)
+    /* console.log(this.form.get('nombre')?.value,' pacienteId: ',pacienteId) */
     this.reservasClient.confirmaReserva(medicoId, pacienteId, fecha, hora).subscribe({
-      next: (reservaId: any) => {
+      next: (reservaId: ReservaModel) => {
         this.messageService.add({
           severity: "success",
           summary: '¡Reserva confirmada!',
@@ -185,8 +184,7 @@ export class TurnosComponent implements OnInit {
  
 //Cierra la sesión activa del usuario y redirige a la vista de inicio de sesión 
 logout(): void {
-  localStorage.removeItem('token'); 
-  this.router.navigate(['/login']); 
+  this.auth.cerrarSesion() 
 }
 
 // Redirige al panel correspondiente según el rol del usuario actual (Admin o Paciente)

@@ -104,8 +104,8 @@ irAGestionHonorarios(): void {
     // 
     const id = medico.idUsuario || medico.id_usuario || medico.idMedico || medico.id;
     
-    console.log('ID seleccionado para actualizar:', id);
-    console.log('Nuevo valor ingresado:', nuevoValor);
+    /* console.log('ID seleccionado para actualizar:', id); */
+   /*  console.log('Nuevo valor ingresado:', nuevoValor); */
 
     if (!id) {
       this.messageService.add({ 
@@ -129,7 +129,7 @@ irAGestionHonorarios(): void {
         this.cargarDatos(); 
       },
       error: (err) => {
-        console.error('Error detallado al actualizar médico:', err);
+        /* console.error('Error detallado al actualizar médico:', err); */
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar el valor en el servidor.' });
       }
     });
@@ -168,7 +168,7 @@ cancelarTurnoAdmin(reserva: any): void {
         this.cargarDatos();
       },
       error: (err) => {
-        console.error('Error al cancelar reserva:', err);
+        /* console.error('Error al cancelar reserva:', err); */
         this.messageService.add({ 
           severity: 'error', 
           summary: 'Error', 
