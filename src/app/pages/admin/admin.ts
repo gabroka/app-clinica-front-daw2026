@@ -9,13 +9,15 @@ import { ReservasClient } from '../../core/services/reservas.client';
 import { MedicosClient } from '../../core/services/medicos.client';
 import { AuthStore } from '../../auth/auth-store';
 import { forkJoin } from 'rxjs';
+import { ListarTodasLasReservasModel } from '../../models/listarTodasLasReservas.model';
+import { MedicoModel } from '../../models/medico.model';
 
 //Componente principal del panel de administración
 //Permite visualizar y gestionar reservas, consultar médicos y administrar valores de consulta
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, TableModule], 
+  imports: [CommonModule, FormsModule, ButtonModule, TableModule],
   templateUrl: './admin.html',
   styleUrl: './admin.css'
 })
@@ -30,7 +32,7 @@ export class AdminComponent implements OnInit {
 
   // Signals reactivos para gestionar el estado local del componente
   reservasAdmin = signal<any[]>([]);
-  medicosAdmin = signal<any[]>([]); 
+  medicosAdmin = signal<any[]>([]);
   cargando = signal(false);
 
   //Dispara la carga inicial de datos
@@ -46,7 +48,8 @@ export class AdminComponent implements OnInit {
       reservas: this.reservasClient.listarTodasLasReservas(),
       medicos: this.medicosClient.getMedicos()
     }).subscribe({
-      next: ({ reservas, medicos }) => {
+      next: ({ reservas, medicos }:{reservas:ListarTodasLasReservasModel[],medicos:MedicoModel[]}) => {
+        console.log('reservas: ',reservas," medicos: ",medicos)
         // Guarda la lista de médicos 
         this.medicosAdmin.set(medicos || []);
 
@@ -66,7 +69,7 @@ export class AdminComponent implements OnInit {
                 timeZone: 'America/Argentina/Buenos_Aires',
                 hour12: false,
               });
-            } catch (e) {}
+            } catch (e) { }
           }
 
           const idMedicoReserva = r.id_medico || r.medicoId || r.medico?.id;
@@ -95,38 +98,38 @@ export class AdminComponent implements OnInit {
   }
 
   //Navega hacia la vista de gestión de honorarios
-irAGestionHonorarios(): void {
-  this.router.navigate(['/pages/valorconsulta']); 
-}
+  irAGestionHonorarios(): void {
+    this.router.navigate(['/pages/valorconsulta']);
+  }
 
   //Actualiza el valor de la consulta médica para un profesional
   actualizarValorConsulta(medico: any, nuevoValor: number): void {
     // 
     const id = medico.idUsuario || medico.id_usuario || medico.idMedico || medico.id;
-    
+
     /* console.log('ID seleccionado para actualizar:', id); */
-   /*  console.log('Nuevo valor ingresado:', nuevoValor); */
+    /*  console.log('Nuevo valor ingresado:', nuevoValor); */
 
     if (!id) {
-      this.messageService.add({ 
-        severity: 'error', 
-        summary: 'Error', 
-        detail: 'No se pudo identificar el ID del médico.' 
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudo identificar el ID del médico.'
       });
       return;
     }
 
-    const datosActualizados = { 
-      ...medico, 
+    const datosActualizados = {
+      ...medico,
       valor_consulta: Number(nuevoValor),
-      valorConsulta: Number(nuevoValor) 
+      valorConsulta: Number(nuevoValor)
     };
 
     this.medicosClient.actualizarMedico(id, datosActualizados).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Valor de consulta actualizado correctamente.' });
         // Recarga la tabla con los datos actualizados
-        this.cargarDatos(); 
+        this.cargarDatos();
       },
       error: (err) => {
         /* console.error('Error detallado al actualizar médico:', err); */
@@ -139,45 +142,48 @@ irAGestionHonorarios(): void {
     this.router.navigate(['/turnos']);
   }
 
-//Permite al administrador cancelar un turno 
-cancelarTurnoAdmin(reserva: any): void {
-  const fechaHoraTurno = new Date(reserva.fechaTurno || reserva.fecha_hora);
-  const ahora = new Date();
+  //Permite al administrador cancelar un turno 
+  cancelarTurnoAdmin(reserva: ListarTodasLasReservasModel): void {
+    const dia = reserva.fecha_hora.slice(0, 2)
+    const mes = reserva.fecha_hora.slice(3, 5)
+    const reserva1 = `${mes}/${dia}/${reserva.fecha_hora.split('/')[2]}`
+    const fechaHoraTurno = new Date(reserva1);
+    const ahora = new Date();
 
-  // Valida si el turno ya pasó o inició
-  if (ahora >= fechaHoraTurno) {
-    this.messageService.add({
-      severity: 'warn',
-      summary: 'No se puede cancelar',
-      detail: 'El turno ya ha iniciado o expirado.'
-    });
-    return;
+    // Valida si el turno ya pasó o inició
+    if (ahora >= fechaHoraTurno) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'No se puede cancelar',
+        detail: 'El turno ya ha iniciado o expirado.'
+      });
+      return;
+    }
+
+    const idReserva = reserva.id;
+
+    if (confirm('¿Estás seguro de que deseas cancelar este turno?')) {
+      this.reservasClient.cancelarReservaAdmin(idReserva).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Turno cancelado correctamente.'
+          });
+          // Refresca la tabla automáticamente
+          this.cargarDatos();
+        },
+        error: (err) => {
+          /* console.error('Error al cancelar reserva:', err); */
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error?.message || 'No se pudo cancelar la reserva.'
+          });
+        }
+      });
+    }
   }
-
-  const idReserva = reserva.idReserva || reserva.id;
-
-  if (confirm('¿Estás seguro de que deseas cancelar este turno?')) {
-    this.reservasClient.cancelarReservaAdmin(idReserva).subscribe({
-      next: () => {
-        this.messageService.add({ 
-          severity: 'success', 
-          summary: 'Éxito', 
-          detail: 'Turno cancelado correctamente.' 
-        });
-        // Refresca la tabla automáticamente
-        this.cargarDatos();
-      },
-      error: (err) => {
-        /* console.error('Error al cancelar reserva:', err); */
-        this.messageService.add({ 
-          severity: 'error', 
-          summary: 'Error', 
-          detail: err.error?.message || 'No se pudo cancelar la reserva.' 
-        });
-      }
-    });
-  }
-}
 
   //Cierra la sesión activa del administrador y redirige al login 
   cerrarSesion(): void {

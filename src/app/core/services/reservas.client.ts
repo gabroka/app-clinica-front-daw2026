@@ -4,6 +4,7 @@ import { map, Observable } from "rxjs";
 import { EstadoReservaEnum } from "../../models/estado-reserva-enum";
 import { ReservaModel } from "../../models/reserva.model";
 import { TurnosMedicoModel } from "../../models/turnosMedico.model";
+import { ListarTurnosPacienteModel } from "../../models/listarTurnosPaciente.model";
 
 @Injectable({ providedIn: 'root' })
 export class ReservasClient {
@@ -43,8 +44,8 @@ export class ReservasClient {
   //RUTAS DE PACIENTE / GENERALES  
 
   // Listar turnos por paciente (GET /api/reservas/paciente/:idPaciente)
-  listarTurnosPaciente(idPaciente: number): Observable<any[]> {
-    return this.http.get<any[]>(`/api/reservas/paciente/${idPaciente}`);
+  listarTurnosPaciente(idPaciente: number): Observable<ListarTurnosPacienteModel[]> {
+    return this.http.get<ListarTurnosPacienteModel[]>(`/api/reservas/paciente/${idPaciente}`);
   }
 
   // Cancelar reserva como Paciente (DELETE /api/reservas/paciente/:id/usuario/:idPaciente)

@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { MedicoModel} from "../../models/medico.model"
-import { ActualizarMedicoResponseDto } from "../../models/actualizarMedicoResponse.dto";
+import { ActualizarMedicoResponseDto } from "../../models/actualizarMedicoResponse.model";
 
 // Define la clase como un servicio inyectable
 @Injectable({
